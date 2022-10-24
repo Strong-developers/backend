@@ -1,6 +1,9 @@
 import express from 'express';
 import dotenv from 'dotenv'
 
+// 라우터 불러오기
+import {testRouter} from './routes';
+
 class App {
     app: express.Application;
 
@@ -13,10 +16,8 @@ dotenv.config();
 
 const app = new App().app;
 
-app.get('/', (req: express.Request, res: express.Response) => {
-    res.send('Hello');
-});
+app.get('/', testRouter);
 
 app.listen(process.env.PORT, () => {
-    console.log('Started server with 8080');
+    console.log('http://localhost:3002');
 });​
