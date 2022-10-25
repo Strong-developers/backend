@@ -1,17 +1,8 @@
 import express from "express";
 import dotenv from "dotenv";
 import mysql from "mysql";
-import dbconfig from "./config/connection";
-const connection = mysql.createConnection(dbconfig);
-
-connection.connect();
-
-connection.query("SELECT * FROM test", (error, rows, fields) => {
-  if (error) throw error;
-  console.log("Test info: ", rows);
-});
-
-connection.end();
+import dbConfig from "./config/connection";
+import { sequelize } from "./models";
 
 // 라우터 불러오기
 import { testRouter } from "./routes";
@@ -28,8 +19,28 @@ dotenv.config();
 
 const app = new App().app;
 
+const connection = mysql.createConnection(dbConfig);
+
+connection.connect();
+
+connection.query("SELECT * FROM test", (error, rows, fields) => {
+  if (error) throw error;
+  console.log("✅ Test info: ", rows);
+});
+
+connection.end();
+
 app.get("/", testRouter);
 
-app.listen(process.env.PORT, () => {
+app.listen(process.env.PORT, async () => {
   console.log("http://localhost:3002");
+
+  await sequelize
+    .authenticate()
+    .then(async () => {
+      console.log("✅ Connection success");
+    })
+    .catch((error) => {
+      console.log("❗️Error: ", error);
+    });
 });

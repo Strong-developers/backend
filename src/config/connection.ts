@@ -5,11 +5,11 @@ interface DBConfig {
   database: string;
 }
 
-const dbconfig: DBConfig = {
+const dbConfig: DBConfig = {
   host: "localhost",
   user: "strongdev",
   password: "strongDev221024!",
   database: "shelter",
 };
 
-export default dbconfig;
+export default dbConfig;
