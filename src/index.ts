@@ -1,11 +1,11 @@
 import express from "express";
 import dotenv from "dotenv";
-import mysql from "mysql";
-//import dbConfig from "./config/connection";
-//import { sequelize } from "./models";
+import sequelize from './models';
 
 // 라우터 불러오기
 import { testRouter } from "./routes";
+
+dotenv.config();
 
 class App {
   app: express.Application;
@@ -15,32 +15,17 @@ class App {
   }
 }
 
-dotenv.config();
-
 const app = new App().app;
 
-// const connection = mysql.createConnection(dbConfig);
-
-// connection.connect();
-
-// connection.query("SELECT * FROM test", (error, rows, fields) => {
-//   if (error) throw error;
-//   console.log("✅ Test info: ", rows);
-// });
-
-// connection.end();
+sequelize.sync({force: false}).then(() => {
+  console.log("데이터 베이스 연결");
+})
+.catch((err) => {
+  console.error(err);
+});
 
 app.get("/", testRouter);
 
-app.listen(process.env.PORT, async () => {
+app.listen(process.env.SERVER_PORT, async () => {
   console.log("http://localhost:3002");
-
-  // await sequelize
-  //   .authenticate()
-  //   .then(async () => {
-  //     console.log("✅ Connection success");
-  //   })
-  //   .catch((error) => {
-  //     console.log("❗️Error: ", error);
-  //   });
 });

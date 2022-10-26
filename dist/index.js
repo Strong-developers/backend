@@ -14,33 +14,23 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const dotenv_1 = __importDefault(require("dotenv"));
-//import dbConfig from "./config/connection";
-//import { sequelize } from "./models";
+const models_1 = __importDefault(require("./models"));
 // 라우터 불러오기
-const routes_1 = require("../src/routes");
+const routes_1 = require("./routes");
+dotenv_1.default.config();
 class App {
     constructor() {
         this.app = (0, express_1.default)();
     }
 }
-dotenv_1.default.config();
 const app = new App().app;
-// const connection = mysql.createConnection(dbConfig);
-// connection.connect();
-// connection.query("SELECT * FROM test", (error, rows, fields) => {
-//   if (error) throw error;
-//   console.log("✅ Test info: ", rows);
-// });
-// connection.end();
+models_1.default.sync({ force: false }).then(() => {
+    console.log("데이터 베이스 연결");
+})
+    .catch((err) => {
+    console.error(err);
+});
 app.get("/", routes_1.testRouter);
-app.listen(process.env.PORT, () => __awaiter(void 0, void 0, void 0, function* () {
+app.listen(process.env.SERVER_PORT, () => __awaiter(void 0, void 0, void 0, function* () {
     console.log("http://localhost:3002");
-    // await sequelize
-    //   .authenticate()
-    //   .then(async () => {
-    //     console.log("✅ Connection success");
-    //   })
-    //   .catch((error) => {
-    //     console.log("❗️Error: ", error);
-    //   });
 }));
