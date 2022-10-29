@@ -11,6 +11,6 @@ app.get("/", (req, res, next) => {
   });
 });
 
-app.listen(3002, () => {
+app.listen(process.env.SERVER_PORT, () => {
   console.log("http://localhost:3002");
 });
