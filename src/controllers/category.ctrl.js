@@ -12,7 +12,7 @@ export default {
         result: mainCategory,
       });
     } catch (err) {
-      console.log(err);
+      next(err);
     }
   },
 
@@ -31,7 +31,7 @@ export default {
         result: subCategory,
       });
     } catch (err) {
-      console.log(err);
+      next(err);
     }
   },
 };
