@@ -9,6 +9,11 @@ const MainCategory = sequelize.define(
       allowNull: false,
       unique: true,
     },
+    path: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+    }
   },
   {
     sequelize,

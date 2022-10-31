@@ -9,6 +9,11 @@ const SubCategory = sequelize.define(
       allowNull: false,
       unique: true,
     },
+    path: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+    },
   },
   {
     sequelize,
@@ -18,6 +23,5 @@ const SubCategory = sequelize.define(
     collate: "utf8_general_ci",
   }
 );
-
 
 export default SubCategory;
