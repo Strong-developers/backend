@@ -4,7 +4,7 @@ import ApiError from "../utils/ApiError";
 export default {
   async findMainCategoryList() {
     const mainCategory = await MainCategory.findAll({
-      attributes: ["id", "name"],
+      attributes: ["id", "name", "path"],
     });
 
     return mainCategory;
@@ -12,7 +12,7 @@ export default {
 
   async findSubCategoryList(id) {
     const subCategory = await SubCategory.findAll({
-      attributes: ["id", "parent_id", "name"],
+      attributes: ["id", "parent_id", "name", "path"],
       where: {
         parent_id: id,
       },
