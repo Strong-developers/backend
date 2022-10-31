@@ -1,5 +1,5 @@
 import { MainCategory, SubCategory } from "../models";
-import { Op, where } from "sequelize";
+import ApiError from '../utils/ApiError';
 
 export default {
   async findMainCategoryList() {
@@ -15,6 +15,10 @@ export default {
       },
     });
 
+    if (subCategory.length === 0) {
+      throw ApiError.setBadRequest('ID에 해당하는 서브 카테고리가 존재하지 않습니다.');
+    }
+    
     return subCategory;
   },
 };
