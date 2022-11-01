@@ -3,7 +3,13 @@ import { Comment } from "../models";
 export default {
   async selectAllComment() {},
 
-  async insertComment() {},
+  async insertComment(postId, ownerId, comment) {
+    await Comment.create({
+      postId,
+      ownerId,
+      comment,
+    });
+  },
 
   async updateComment(commentId, comment) {
     await Comment.update(
