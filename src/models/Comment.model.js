@@ -11,7 +11,7 @@ const Comment = sequelize.define(
   },
   {
     sequelize,
-    timestamps,
+    timestamps: true,
     tableName: "comments",
     charset: "utf8",
     collate: "utf8_general_ci",
