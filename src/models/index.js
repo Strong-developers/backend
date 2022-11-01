@@ -23,4 +23,4 @@ SubCategory.belongsTo(MainCategory, {
 //Post.hasMany(Comment, { foreignKey: "post_id", sourceKey: "id" });
 //Comment.belongsTo(Post, { foreignKey: "post_id", targetKey: "id" });
 
-export { MainCategory, SubCategory };
+export { MainCategory, SubCategory, Comment };
