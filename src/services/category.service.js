@@ -18,7 +18,7 @@ export default {
       },
     });
 
-    if (subCategory.length) {
+    if (!subCategory.length) {
       throw ApiError.setBadRequest(
         "ID에 해당하는 서브 카테고리가 존재하지 않습니다."
       );
