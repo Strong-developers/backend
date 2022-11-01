@@ -1,5 +1,6 @@
 import MainCategory from "./MainCategory.model";
 import SubCategory from "./SubCategory.model";
+import Comment from "./Comment.model";
 
 /**
  * 메인 카테고리 모델과 서브 카테고리 모델은 1:N 관계
@@ -10,6 +11,16 @@ SubCategory.belongsTo(MainCategory, {
   targetKey: "id",
 });
 
+/**
+ * User 모델과 Comment 모델은 1 : N 관계
+ */
+//User.hasMany(Comment, { foreignKey: "owner_id", sourceKey: "id" });
+//Comment.belongsTo(User, { foreignKey: "owner_id", targetKey: "id" });
 
+/**
+ * Post 모델과 Comment 모델은 1 : N 관계
+ */
+//Post.hasMany(Comment, { foreignKey: "post_id", sourceKey: "id" });
+//Comment.belongsTo(Post, { foreignKey: "post_id", targetKey: "id" });
 
 export { MainCategory, SubCategory };
