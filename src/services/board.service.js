@@ -3,11 +3,18 @@ import { Comment } from "../models";
 export default {
   async selectAllComment() {},
 
-  async insertComment() {
+  async insertComment() {},
 
+  async updateComment(commentId, comment) {
+    await Comment.update(
+      { comment },
+      {
+        where: {
+          id: commentId,
+        },
+      }
+    );
   },
-
-  async updateComment() {},
 
   async deleteComment(commentId) {
     await Comment.destroy({
