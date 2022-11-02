@@ -7,14 +7,22 @@ export default {
    * @param {number} postId 
    * @returns 
    */
-  async selectCommentCount(postId) {
+  async selectCommentPageCount(postId) {
+    let totalCommentPage = null;
+    const perPage = 10;
     const commentCount = await Comment.count({
       where: {
         postId
       }
     });
 
-    return commentCount;
+    if (commentCount % perPage === 0) {
+      totalCommentPage = commentCount / perPage;
+    } else {
+      totalCommentPage = Math.floor(commentCount / perPage) + 1;
+    }
+
+    return totalCommentPage;
   },
 
   /**

@@ -9,14 +9,14 @@ export default {
     const { page } = req.query;
     try {
       const commentList = await boardService.selectComment(postId, page);
-      const commentCount = await boardService.selectCommentCount(postId);
+      const commentPageCount = await boardService.selectCommentPageCount(postId);
 
       res.status(200).json({
         success: true,
         status: 200,
         message: "해당 게시물 댓글 불러오기 성공",
         result: commentList,
-        totalCount: commentCount,
+        totalCount: commentPageCount,
       });
     } catch (err) {
       next(err);
