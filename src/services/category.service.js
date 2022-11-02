@@ -7,7 +7,7 @@ export default {
    * 
    * @returns 
    */
-  async findMainCategoryList() {
+  async selectMainCategoryList() {
     const mainCategory = await MainCategory.findAll({
       attributes: ["id", "name", "path"],
       raw: true,
