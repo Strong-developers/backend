@@ -1,6 +1,6 @@
 import MainCategory from "./MainCategory.model";
 import SubCategory from "./SubCategory.model";
-import Comment from "./Comment.model";
+import ReviewComment from "./ReviewComment.model";
 import Review from './Review';
 
 /**
@@ -13,16 +13,16 @@ SubCategory.belongsTo(MainCategory, {
 });
 
 /**
- * User 모델과 Comment 모델은 1 : N 관계
+ * User 모델과 ReviewComment 모델은 1 : N 관계
  */
-//User.hasMany(Comment, { foreignKey: "owner_id", sourceKey: "id" });
-//Comment.belongsTo(User, { foreignKey: "owner_id", targetKey: "id" });
+//User.hasMany(ReviewComment, { foreignKey: "owner_id", sourceKey: "id" });
+//ReviewComment.belongsTo(User, { foreignKey: "owner_id", targetKey: "id" });
 
 /**
- * Post 모델과 Comment 모델은 1 : N 관계
+ * Post 모델과 ReviewComment 모델은 1 : N 관계
  */
-//Post.hasMany(Comment, { foreignKey: "post_id", sourceKey: "id" });
-//Comment.belongsTo(Post, { foreignKey: "post_id", targetKey: "id" });
+//Post.hasMany(ReviewComment, { foreignKey: "post_id", sourceKey: "id" });
+//ReviewComment.belongsTo(Post, { foreignKey: "post_id", targetKey: "id" });
 
 /**
  * User 모델과 Review 모델은 1 : N 관계
@@ -31,4 +31,4 @@ SubCategory.belongsTo(MainCategory, {
  * Review.belongsTo(User, { foreignKey: "owner_id", targetKey: "id"});
  */
 
-export { MainCategory, SubCategory, Comment, Review };
+export { MainCategory, SubCategory, ReviewComment, Review };

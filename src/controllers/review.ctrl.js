@@ -1,4 +1,4 @@
-import { boardService } from "../services";
+import { reviewService } from "../services";
 
 // 유저 아이디 받아서 수정 및 삭제 가능한지 생각해보기
 
@@ -8,8 +8,8 @@ export default {
     const { postId } = req.params;
     const { page } = req.query;
     try {
-      const commentList = await boardService.selectComment(postId, page);
-      const commentPageCount = await boardService.selectCommentPageCount(postId);
+      const commentList = await reviewService.selectComment(postId, page);
+      const commentPageCount = await reviewService.selectCommentPageCount(postId);
 
       res.status(200).json({
         success: true,
@@ -29,7 +29,7 @@ export default {
     const { comment, ownerId } = req.body;
 
     try {
-      await boardService.insertComment(postId, ownerId, comment);
+      await reviewService.insertComment(postId, ownerId, comment);
 
       res.status(201).json({
         success: true,
@@ -47,7 +47,7 @@ export default {
     const { comment } = req.body;
 
     try {
-      await boardService.updateComment(commentId, comment);
+      await reviewService.updateComment(commentId, comment);
 
       res.status(201).json({
         success: true,
@@ -64,7 +64,7 @@ export default {
     const { commentId } = req.params;
 
     try {
-      await boardService.deleteComment(commentId);
+      await reviewService.deleteComment(commentId);
 
       res.status(201).json({
         success: true,
