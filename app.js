@@ -4,7 +4,7 @@ import cors from "cors";
 import sequelize from "./src/configs/sequelize";
 import errorMiddleware from "./src/middlewares/error";
 
-import { categoryRouter, boardRouter } from "./src/routes";
+import { categoryRouter, reviewRouter } from "./src/routes";
 
 dotenv.config();
 
@@ -20,7 +20,7 @@ app.use(
 sequelize.sync({ force: false });
 
 app.use("/category", categoryRouter);
-app.use("/board", boardRouter);
+app.use("/review", reviewRouter);
 
 // 에러처리 미들웨어
 app.use(errorMiddleware);
