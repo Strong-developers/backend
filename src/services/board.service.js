@@ -35,6 +35,7 @@ export default {
   async selectComment(postId, page) {
     const perPage = 10;
     const {commentList} = await Comment.findAll({
+      attributes: ['id', 'owner_id', 'post_id', 'comment'],
       where: {
         postId,
       },
