@@ -4,7 +4,6 @@ import { categoryCtrl } from '../controllers';
 
 const router = express.Router();
 
-router.get("/main", categoryCtrl.getMainCategory);
-router.get("/sub/:id", categoryCtrl.getSubCategory);
+router.get("/", categoryCtrl.getMainCategory);
 
 export default router;
