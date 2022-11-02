@@ -3,13 +3,31 @@ import { reviewService } from "../services";
 // 유저 아이디 받아서 수정 및 삭제 가능한지 생각해보기
 
 export default {
+  async addPost(req, res, next) {
+    const { ownerId, description } = req.body;
+
+    try {
+      await reviewService.insertPost(ownerId, description);
+
+      res.status(201).json({
+        success: true,
+        status: 201,
+        message: "게시물 등록 성공",
+      });
+    } catch (err) {
+      next(err);
+    }
+  },
+
   // 모든 댓글 데이터 가져오기(페이지네이션)
   async getCommentList(req, res, next) {
     const { postId } = req.params;
     const { page } = req.query;
     try {
       const commentList = await reviewService.selectComment(postId, page);
-      const commentPageCount = await reviewService.selectCommentPageCount(postId);
+      const commentPageCount = await reviewService.selectCommentPageCount(
+        postId
+      );
 
       res.status(200).json({
         success: true,
