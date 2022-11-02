@@ -1,7 +1,28 @@
 import { Comment } from "../models";
 
 export default {
-  async selectAllComment() {},
+  async selectCommentCount(postId) {
+    const commentCount = await Comment.count({
+      where: {
+        postId
+      }
+    });
+
+    return commentCount;
+  },
+
+  async selectComment(postId, page) {
+    const perPage = 10;
+    const {commentList} = await Comment.findAll({
+      where: {
+        postId,
+      },
+      offset: (page - 1) * perPage,
+      limit: perPage,
+    });
+
+    return commentList;
+  },
 
   async insertComment(postId, ownerId, comment) {
     await Comment.create({
