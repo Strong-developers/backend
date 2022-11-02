@@ -1,4 +1,4 @@
-import { Comment } from "../models";
+import { ReviewComment } from "../models";
 
 export default {
   /**
@@ -10,7 +10,7 @@ export default {
   async selectCommentPageCount(postId) {
     let totalCommentPage = null;
     const perPage = 10;
-    const commentCount = await Comment.count({
+    const commentCount = await ReviewComment.count({
       where: {
         postId
       }
@@ -34,7 +34,7 @@ export default {
    */
   async selectComment(postId, page) {
     const perPage = 10;
-    const {commentList} = await Comment.findAll({
+    const {commentList} = await ReviewComment.findAll({
       attributes: ['id', 'owner_id', 'post_id', 'comment'],
       where: {
         postId,
@@ -54,7 +54,7 @@ export default {
    * @param {string} comment 
    */
   async insertComment(postId, ownerId, comment) {
-    await Comment.create({
+    await ReviewComment.create({
       postId,
       ownerId,
       comment,
@@ -68,7 +68,7 @@ export default {
    * @param {string} comment 
    */
   async updateComment(commentId, comment) {
-    await Comment.update(
+    await ReviewComment.update(
       { comment },
       {
         where: {
@@ -84,7 +84,7 @@ export default {
    * @param {number} commentId 
    */
   async deleteComment(commentId) {
-    await Comment.destroy({
+    await ReviewComment.destroy({
       where: {
         id: commentId,
       },
