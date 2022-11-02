@@ -5,7 +5,21 @@ export default {
   async findMainCategoryList() {
     const mainCategory = await MainCategory.findAll({
       attributes: ["id", "name", "path"],
+      raw: true,
     });
+
+    const result = await Promise.all(
+      mainCategory.map(async (el) => {
+        const subCategory = await SubCategory.findAll({
+          attributes: ["id", "parent_id", "name", "path"],
+          where: {
+            parent_id: el.id,
+          },
+        });
+        el.children = subCategory;
+        return el;
+      })
+    );
 
     return mainCategory;
   },
