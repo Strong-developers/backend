@@ -3,12 +3,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import sequelize from "./src/configs/sequelize";
 import errorMiddleware from "./src/middlewares/error";
-import {
-  categoryRouter,
-  boardRouter,
-  authRouter,
-  reviewRouter,
-} from "./src/routes";
+import { categoryRouter, authRouter, reviewRouter } from "./src/routes";
 
 dotenv.config();
 
@@ -25,7 +20,6 @@ app.use(
 sequelize.sync({ force: false });
 
 app.use("/category", categoryRouter);
-app.use("/board", boardRouter);
 app.use("/auth", authRouter);
 app.use("/review", reviewRouter);
 
