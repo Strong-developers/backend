@@ -1,7 +1,7 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../configs/sequelize";
 
-const Comment = sequelize.define(
+const ReviewComment = sequelize.define(
   "Comment",
   {
     comment: {
@@ -18,4 +18,4 @@ const Comment = sequelize.define(
   }
 );
 
-export default Comment;
+export default ReviewComment;
