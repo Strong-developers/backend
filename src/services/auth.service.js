@@ -46,11 +46,9 @@ export default {
       password,
       Number.parseInt(process.env.SALTROUNDS)
     );
-    const checkPassword = await bcrypt.compare(password, hashedpassword);
+    const isCorrectPassword = await bcrypt.compare(password, hashedpassword);
 
-    console.log(checkPassword);
-
-    if (!checkPassword) {
+    if (!isCorrectPassword) {
       throw ApiError.setBadRequest("비밀번호가 일치하지 않습니다.");
     }
 
