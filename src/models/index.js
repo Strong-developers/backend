@@ -1,6 +1,7 @@
 import MainCategory from "./MainCategory.model";
 import SubCategory from "./SubCategory.model";
 import Comment from "./Comment.model";
+import User from "./User.model";
 
 /**
  * 메인 카테고리 모델과 서브 카테고리 모델은 1:N 관계
@@ -23,4 +24,4 @@ SubCategory.belongsTo(MainCategory, {
 //Post.hasMany(Comment, { foreignKey: "post_id", sourceKey: "id" });
 //Comment.belongsTo(Post, { foreignKey: "post_id", targetKey: "id" });
 
-export { MainCategory, SubCategory, Comment };
+export { MainCategory, SubCategory, Comment, User };
