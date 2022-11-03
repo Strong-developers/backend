@@ -1,7 +1,8 @@
 import MainCategory from "./MainCategory.model";
 import SubCategory from "./SubCategory.model";
+import User from "./User.model";
 import ReviewComment from "./ReviewComment.model";
-import ReviewPost from './ReviewPost';
+import ReviewPost from "./ReviewPost";
 
 /**
  * 메인 카테고리 모델과 서브 카테고리 모델은 1:N 관계
@@ -26,9 +27,9 @@ SubCategory.belongsTo(MainCategory, {
 
 /**
  * User 모델과 ReviewPost 모델은 1 : N 관계
- * 
+ *
  * User.hasMany(ReviewPost, { foreignKey: "owner_id", sourceKey: "id"});
  * ReviewPost.belongsTo(User, { foreignKey: "owner_id", targetKey: "id"});
  */
 
-export { MainCategory, SubCategory, ReviewComment, ReviewPost };
+export { MainCategory, SubCategory, ReviewComment, ReviewPost, User };

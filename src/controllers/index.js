@@ -1,7 +1,6 @@
-import categoryCtrl from './category.ctrl';
-import reviewCtrl from './review.ctrl';
+import categoryCtrl from "./category.ctrl";
+import boardCtrl from "./board.ctrl";
+import authCtrl from "./auth.ctrl";
+import reviewCtrl from "./review.ctrl";
 
-export {
-  categoryCtrl,
-  reviewCtrl,
-}
+export { categoryCtrl, boardCtrl, authCtrl, reviewCtrl };
