@@ -1,5 +1,6 @@
 import { ReviewComment } from "../models";
 import { ReviewPost } from "../models";
+import { REVIEW_COMMENT_PER_PAGE } from "../utils/Constant";
 
 export default {
   async insertPost(ownerId, description) {
@@ -13,21 +14,19 @@ export default {
    * @returns
    */
   async selectCommentPageCount(postId) {
-    let totalCommentPage = null;
-    const perPage = 10;
     const commentCount = await ReviewComment.count({
       where: {
         postId,
       },
     });
 
-    if (commentCount % perPage === 0) {
-      totalCommentPage = commentCount / perPage;
-    } else {
-      totalCommentPage = Math.floor(commentCount / perPage) + 1;
-    }
-
-    return totalCommentPage;
+    return (() => {
+      if (commentCount % REVIEW_COMMENT_PER_PAGE === 0) {
+        return commentCount / REVIEW_COMMENT_PER_PAGE;
+      } else {
+        return Math.floor(commentCount / REVIEW_COMMENT_PER_PAGE) + 1;
+      }
+    })();
   },
 
   /**
@@ -38,14 +37,13 @@ export default {
    * @returns
    */
   async selectComment(postId, page) {
-    const perPage = 10;
     const { commentList } = await ReviewComment.findAll({
       attributes: ["id", "owner_id", "post_id", "comment"],
       where: {
         postId,
       },
-      offset: (page - 1) * perPage,
-      limit: perPage,
+      offset: (page - 1) * REVIEW_COMMENT_PER_PAGE,
+      limit: REVIEW_COMMENT_PER_PAGE,
     });
 
     return commentList;
