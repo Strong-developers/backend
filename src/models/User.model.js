@@ -19,7 +19,7 @@ const User = sequelize.define(
       unique: true,
     },
     role: {
-      type: DataTypes.NUMBER,
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
   },
