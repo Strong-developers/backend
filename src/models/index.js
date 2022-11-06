@@ -16,20 +16,21 @@ SubCategory.belongsTo(MainCategory, {
 /**
  * User 모델과 ReviewComment 모델은 1 : N 관계
  */
-//User.hasMany(ReviewComment, { foreignKey: "owner_id", sourceKey: "id" });
-//ReviewComment.belongsTo(User, { foreignKey: "owner_id", targetKey: "id" });
+User.hasMany(ReviewComment, { foreignKey: "owner_id", sourceKey: "id" });
+ReviewComment.belongsTo(User, { foreignKey: "owner_id", targetKey: "id" });
 
 /**
  * Post 모델과 ReviewComment 모델은 1 : N 관계
  */
-//Post.hasMany(ReviewComment, { foreignKey: "post_id", sourceKey: "id" });
-//ReviewComment.belongsTo(Post, { foreignKey: "post_id", targetKey: "id" });
+ReviewPost.hasMany(ReviewComment, { foreignKey: "post_id", sourceKey: "id" });
+ReviewComment.belongsTo(ReviewPost, { foreignKey: "post_id", targetKey: "id" });
 
 /**
  * User 모델과 ReviewPost 모델은 1 : N 관계
- *
- * User.hasMany(ReviewPost, { foreignKey: "owner_id", sourceKey: "id"});
- * ReviewPost.belongsTo(User, { foreignKey: "owner_id", targetKey: "id"});
  */
+
+User.hasMany(ReviewPost, { foreignKey: "owner_id", sourceKey: "id"});
+ReviewPost.belongsTo(User, { foreignKey: "owner_id", targetKey: "id"});
+
 
 export { MainCategory, SubCategory, ReviewComment, ReviewPost, User };
