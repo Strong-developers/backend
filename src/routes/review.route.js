@@ -1,11 +1,10 @@
 import express from "express";
-
+import verifyToken from "../middlewares/verifyToken";
 import { reviewCtrl } from "../controllers";
 
 const router = express.Router();
 
 router.post("/posts", reviewCtrl.addPost);
-
 router.get("/comments/:postId", reviewCtrl.getCommentList);
 router.post("/comments/:postId", reviewCtrl.addComment);
 router.put("/comments/:commentId", reviewCtrl.modifyComment);

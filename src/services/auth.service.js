@@ -1,10 +1,7 @@
 import { User } from "../models";
 import bcrypt from "bcrypt";
 import ApiError from "../utils/ApiError";
-import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
-
-dotenv.config();
 
 export default {
   // 회원가입
@@ -60,11 +57,11 @@ export default {
     };
   },
 
-  // JWT 토큰 생성
+  // Access Token 생성
   async createAccessToken(id) {
-    const token = jwt.sign({ id }, process.env.JWT_SECRET_KEY, {
+    const accessToken = jwt.sign({ id }, process.env.ACCESS_TOKEN_SECRET, {
       expiresIn: "1h",
     });
-    return token;
+    return accessToken;
   },
 };
