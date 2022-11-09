@@ -1,10 +1,59 @@
-import { ReviewComment } from "../models";
-import { ReviewPost } from "../models";
-import { REVIEW_COMMENT_PER_PAGE } from "../utils/Constant";
+import { ReviewPost, ReviewComment, User } from "../models";
+import {
+  REVIEW_COMMENT_PER_PAGE,
+  REVIEW_POST_PER_PAGE,
+} from "../utils/Constant";
 
 export default {
-  async insertPost(ownerId, description) {
-    await ReviewPost.create({ ownerId, description });
+  async selectReviewCount() {
+    const reviewCount = await ReviewPost.count({});
+
+    return (() => {
+      if (reviewCount % 12 === 0) {
+        return reviewCount / 12;
+      } else {
+        return Math.floor(reviewCount / 12) + 1;
+      }
+    })();
+  },
+
+  async selectReview(page) {
+    const reviews = await ReviewPost.findAll({
+      attributes: ["id", "title", "description", "userId", "createdAt"],
+      include: [
+        {
+          model: User,
+          attributes: ["nickname", "role", "profileUrl"],
+        },
+      ],
+      offset: (page - 1) * 12,
+      limit: 12,
+    });
+
+    return reviews;
+  },
+
+  async insertReview(userId, title, description) {
+    await ReviewPost.create({ userId, title, description });
+  },
+
+  async updateReview(postId, title, description) {
+    await ReviewPost.update(
+      { title, description },
+      {
+        where: {
+          id: postId,
+        },
+      }
+    );
+  },
+
+  async deleteReview(postId) {
+    await ReviewPost.destroy({
+      where: {
+        id: postId,
+      },
+    });
   },
 
   /**
