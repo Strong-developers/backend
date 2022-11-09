@@ -6,6 +6,13 @@ import ReviewPost from "./ReviewPost.model";
 import Shelter from "./Shelter.model";
 import UserReservation from "./UserReservation.model";
 import AvailableReservation from "./AvailableReservation.model";
+import FeedPost from "./FeedPost.model";
+
+/**
+ * 보호소계정 모델과 피드게시물 모델은 1:N 관계
+ */
+Shelter.hasMany(FeedPost, { foreignKey: "shelterId", sourceKey: "id" });
+FeedPost.belongsTo(Shelter, { foreignKey: "shelterKey", targetKey: "id" });
 
 /**
  * 메인 카테고리 모델과 서브 카테고리 모델은 1:N 관계
@@ -37,14 +44,17 @@ Shelter.belongsTo(User);
 /**
  * User 모델과 UserReservation 모델은 1 : N 관계
  */
-User.hasMany(UserReservation, { foreignKey: 'user_id', sourceKey: 'id'});
-UserReservation.belongsTo(User, {foreignKey: 'user_id', targetKey: 'id'})
+User.hasMany(UserReservation, { foreignKey: "user_id", sourceKey: "id" });
+UserReservation.belongsTo(User, { foreignKey: "user_id", targetKey: "id" });
 
 /**
  * User 모델과 AvailableReservation 모델은 1 : N 관계
  */
-User.hasMany(AvailableReservation, {foreignKey: 'user_id', sourceKey: 'id'});
-AvailableReservation.belongsTo(User, {foreignKey: 'user_id', targetKey: 'id'});
+User.hasMany(AvailableReservation, { foreignKey: "user_id", sourceKey: "id" });
+AvailableReservation.belongsTo(User, {
+  foreignKey: "user_id",
+  targetKey: "id",
+});
 
 /**
  * Post 모델과 ReviewComment 모델은 1 : N 관계
@@ -62,5 +72,14 @@ AvailableReservation.belongsToMany(UserReservation, {
   through: "ReservationMapping",
 });
 
-export { MainCategory, SubCategory, ReviewComment, ReviewPost, User, Shelter, UserReservation, AvailableReservation };
- 
+export {
+  MainCategory,
+  SubCategory,
+  ReviewComment,
+  ReviewPost,
+  User,
+  Shelter,
+  UserReservation,
+  AvailableReservation,
+  FeedPost,
+};

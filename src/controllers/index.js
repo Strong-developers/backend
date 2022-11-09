@@ -1,5 +1,6 @@
 import categoryCtrl from "./category.ctrl";
 import authCtrl from "./auth.ctrl";
 import reviewCtrl from "./review.ctrl";
+import feedCtrl from "./feed.ctrl";
 
-export { categoryCtrl, authCtrl, reviewCtrl };
+export { categoryCtrl, authCtrl, reviewCtrl, feedCtrl };
