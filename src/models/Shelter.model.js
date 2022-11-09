@@ -12,7 +12,7 @@ const Shelter = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    phone_number: {
+    phoneNumber: {
       type: DataTypes.STRING,
       allowNull: false,
     },
