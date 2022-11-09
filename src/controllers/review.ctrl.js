@@ -21,7 +21,6 @@ export default {
   },
 
   async modifyReview(req, res, next) {
-    
     const { postId } = req.params;
     const { title, description } = req.body;
 
@@ -32,6 +31,22 @@ export default {
         success: true,
         status: 201,
         message: "게시물 수정 성공",
+      });
+    } catch (err) {
+      next(err);
+    }
+  },
+
+  async removeReview(req, res, next) {
+    const { postId } = req.params;
+
+    try {
+      await reviewService.deleteReview(postId);
+
+      res.status(201).json({
+        success: true,
+        status: 201,
+        message: "게시물 삭제 성공",
       });
     } catch (err) {
       next(err);

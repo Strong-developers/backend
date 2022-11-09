@@ -18,6 +18,14 @@ export default {
     );
   },
 
+  async deleteReview(postId) {
+    await ReviewPost.destroy({
+      where: {
+        id: postId,
+      }
+    })
+  },
+
   /**
    * 게시물에 달린 댓글의 총 개수 리턴
    *
