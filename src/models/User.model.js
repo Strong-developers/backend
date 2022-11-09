@@ -22,7 +22,7 @@ const User = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    profile_url: {
+    profileUrl: {
       type: DataTypes.STRING,
       allowNull: false,
       defaultValue:
