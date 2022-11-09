@@ -3,6 +3,23 @@ import { reviewService } from "../services";
 // 유저 아이디 받아서 수정 및 삭제 가능한지 생각해보기
 
 export default {
+  async getReview(req, res, next) {
+    const { page } = req.query;
+
+    try {
+      const reviews = await reviewService.selectReview(page);
+      const reviewPageCount = await reviewService.selectReviewCount();
+      res.status(200).json({
+        success: true,
+        status: 200,
+        message: "게시물 리스트 불러오기 성공",
+        result: { reviewPageCount, reviews },
+      });
+    } catch (err) {
+      next(err);
+    }
+  },
+
   async addReview(req, res, next) {
     const userId = req.userId;
     const { title, description } = req.body;
