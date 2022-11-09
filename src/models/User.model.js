@@ -22,6 +22,12 @@ const User = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
+    profileUrl: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue:
+        "https://r1.community.samsung.com/t5/image/serverpage/image-id/907062i6D156A2E31A1D212/image-size/large?v=v2&px=999",
+    },
   },
   {
     sequelize,
