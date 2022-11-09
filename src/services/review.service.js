@@ -19,11 +19,11 @@ export default {
 
   async selectReview(page) {
     const reviews = await ReviewPost.findAll({
-      attributes: ["id", "title", "description", "userId", "createdAt"],
+      attributes: ["id", "title", "description", "createdAt"],
       include: [
         {
           model: User,
-          attributes: ["nickname", "role", "profileUrl"],
+          attributes: ["nickname", "role", "profileUrl", "id"],
         },
       ],
       offset: (page - 1) * 12,
