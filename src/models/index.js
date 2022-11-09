@@ -23,12 +23,6 @@ User.hasMany(ReviewComment, { foreignKey: "owner_id", sourceKey: "id" });
 ReviewComment.belongsTo(User, { foreignKey: "owner_id", targetKey: "id" });
 
 /**
- * Post 모델과 ReviewComment 모델은 1 : N 관계
- */
-ReviewPost.hasMany(ReviewComment, { foreignKey: "post_id", sourceKey: "id" });
-ReviewComment.belongsTo(ReviewPost, { foreignKey: "post_id", targetKey: "id" });
-
-/**
  * User 모델과 ReviewPost 모델은 1 : N 관계
  */
 User.hasMany(ReviewPost, { foreignKey: "owner_id", sourceKey: "id" });
@@ -41,6 +35,24 @@ User.hasOne(Shelter);
 Shelter.belongsTo(User);
 
 /**
+ * User 모델과 UserReservation 모델은 1 : N 관계
+ */
+User.hasMany(UserReservation, { foreignKey: 'user_id', sourceKey: 'id'});
+UserReservation.belongsTo(User, {foreignKey: 'user_id', targetKey: 'id'})
+
+/**
+ * User 모델과 AvailableReservation 모델은 1 : N 관계
+ */
+User.hasMany(AvailableReservation, {foreignKey: 'user_id', sourceKey: 'id'});
+AvailableReservation.belongsTo(User, {foreignKey: 'user_id', targetKey: 'id'});
+
+/**
+ * Post 모델과 ReviewComment 모델은 1 : N 관계
+ */
+ReviewPost.hasMany(ReviewComment, { foreignKey: "post_id", sourceKey: "id" });
+ReviewComment.belongsTo(ReviewPost, { foreignKey: "post_id", targetKey: "id" });
+
+/**
  * UserReservation 모델과 AvailableReservation 모델은 N : M 관계
  */
 UserReservation.belongsToMany(AvailableReservation, {
@@ -51,3 +63,4 @@ AvailableReservation.belongsToMany(UserReservation, {
 });
 
 export { MainCategory, SubCategory, ReviewComment, ReviewPost, User, Shelter, UserReservation, AvailableReservation };
+ 
