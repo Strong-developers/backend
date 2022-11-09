@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 import ApiError from "../utils/ApiError";
 
 export default (req, res, next) => {
-  const token = req.header["authorization"].split(" ")[1];
+  const token = req.headers["authorization"].split("Bearer ")[1];
 
   if (!token) {
     next(ApiError.setBadRequest("토큰이 없습니다."));
