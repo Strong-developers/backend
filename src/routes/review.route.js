@@ -4,7 +4,9 @@ import { reviewCtrl } from "../controllers";
 
 const router = express.Router();
 
-router.post("/posts", reviewCtrl.addPost);
+router.post("/posts", verifyToken, reviewCtrl.addReview);
+router.put("/posts/:postId", reviewCtrl.modifyReview);
+
 router.get("/comments/:postId", reviewCtrl.getCommentList);
 router.post("/comments/:postId", reviewCtrl.addComment);
 router.put("/comments/:commentId", reviewCtrl.modifyComment);

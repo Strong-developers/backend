@@ -3,16 +3,35 @@ import { reviewService } from "../services";
 // 유저 아이디 받아서 수정 및 삭제 가능한지 생각해보기
 
 export default {
-  async addPost(req, res, next) {
-    const { ownerId, description } = req.body;
+  async addReview(req, res, next) {
+    const userId = req.userId;
+    const { title, description } = req.body;
 
     try {
-      await reviewService.insertPost(ownerId, description);
+      await reviewService.insertReview(userId, title, description);
 
       res.status(201).json({
         success: true,
         status: 201,
         message: "게시물 등록 성공",
+      });
+    } catch (err) {
+      next(err);
+    }
+  },
+
+  async modifyReview(req, res, next) {
+    
+    const { postId } = req.params;
+    const { title, description } = req.body;
+
+    try {
+      await reviewService.updateReview(postId, title, description);
+
+      res.status(201).json({
+        success: true,
+        status: 201,
+        message: "게시물 수정 성공",
       });
     } catch (err) {
       next(err);

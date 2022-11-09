@@ -3,8 +3,19 @@ import { ReviewPost } from "../models";
 import { REVIEW_COMMENT_PER_PAGE } from "../utils/Constant";
 
 export default {
-  async insertPost(ownerId, description) {
-    await ReviewPost.create({ ownerId, description });
+  async insertReview(userId, title, description) {
+    await ReviewPost.create({ userId, title, description });
+  },
+
+  async updateReview(postId, title, description) {
+    await ReviewPost.update(
+      { title, description },
+      {
+        where: {
+          id: postId,
+        },
+      }
+    );
   },
 
   /**
