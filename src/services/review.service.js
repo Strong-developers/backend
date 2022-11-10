@@ -6,6 +6,11 @@ import {
 } from "../utils/Constant";
 
 export default {
+   /**
+   * 후기 게시판 게시물의 글 개수 리턴
+   *
+   * @returns
+   */
   async selectReviewCount() {
     const reviewCount = await ReviewPost.count({});
 
@@ -18,12 +23,19 @@ export default {
     })();
   },
 
+  /**
+   * 후기 게시판 게시물 페이지네이션
+   * 
+   * @param {number} page 
+   * @returns 
+   */
   async selectReview(page) {
     const reviews = await ReviewPost.findAll({
       attributes: ["id", "title", "description", "createdAt"],
       include: [
         {
           model: User,
+          as: 'user',
           attributes: ["nickname", "role", "profileUrl", "id"],
         },
       ],
@@ -34,6 +46,13 @@ export default {
     return reviews;
   },
 
+  /**
+   * 후기 게시판 게시물 등록
+   * 
+   * @param {number} userId 
+   * @param {string} title 
+   * @param {string} description 
+   */
   async insertReview(userId, title, description) {
     if (!title.trim()) {
       throw ApiError.setBadRequest("타이틀이 null이거나 공백입니다.");
@@ -45,6 +64,13 @@ export default {
     await ReviewPost.create({ userId, title, description });
   },
 
+  /**
+   * 후기 게시판 게시물 수정
+   * 
+   * @param {number} postId 
+   * @param {string} title 
+   * @param {string} description 
+   */
   async updateReview(postId, title, description) {
     if (!title.trim()) {
       throw ApiError.setBadRequest("타이틀이 null이거나 공백입니다.");
@@ -94,7 +120,7 @@ export default {
   },
 
   /**
-   * 게시물에 해당하는 댓글을 10개 단위로 불러옴
+   * 후기 게시판 게시물에 해당하는 댓글을 10개 단위로 불러옴
    *
    * @param {number} postId
    * @param {number} page
@@ -114,7 +140,7 @@ export default {
   },
 
   /**
-   * 댓글 생성하는 서비스
+   * 후기 게시판 게시물의 댓글 생성하는 서비스
    *
    * @param {number} postId
    * @param {number} ownerId
@@ -129,7 +155,7 @@ export default {
   },
 
   /**
-   * 댓글 수정하는 서비스
+   * 후기 게시판 게시물의 댓글 수정하는 서비스
    *
    * @param {number} commentId
    * @param {string} comment
@@ -146,7 +172,7 @@ export default {
   },
 
   /**
-   * 댓글 삭제하는 서비스
+   * 후기 게시판 게시물의 댓글 삭제하는 서비스
    *
    * @param {number} commentId
    */
