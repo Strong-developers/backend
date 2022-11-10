@@ -25,8 +25,8 @@ ReviewComment.belongsTo(User, { foreignKey: "userId", targetKey: "id" });
 /**
  * User 모델과 ReviewPost 모델은 1 : N 관계
  */
-User.hasMany(ReviewPost, { foreignKey: "userId", sourceKey: "id" });
-ReviewPost.belongsTo(User, { foreignKey: "userId", targetKey: "id" });
+User.hasMany(ReviewPost, { foreignKey: "userId", as: 'reviewPost', sourceKey: "id" });
+ReviewPost.belongsTo(User, { foreignKey: "userId", as: 'user', targetKey: "id" });
 
 /**
  * User 모델과 Shelter 모델은 1 : 1 관계

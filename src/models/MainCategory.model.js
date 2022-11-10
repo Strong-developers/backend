@@ -7,12 +7,12 @@ const MainCategory = sequelize.define(
     name: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true,
+      unique: 'name',
     },
     path: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true,
+      unique: 'path',
     }
   },
   {
