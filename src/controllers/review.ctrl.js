@@ -84,8 +84,7 @@ export default {
         success: true,
         status: 200,
         message: "해당 게시물 댓글 불러오기 성공",
-        result: commentList,
-        commentPageCount,
+        result: { commentPageCount, commentList },
       });
     } catch (err) {
       next(err);

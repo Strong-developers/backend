@@ -127,8 +127,8 @@ export default {
    * @returns
    */
   async selectComment(postId, page) {
-    const { commentList } = await ReviewComment.findAll({
-      attributes: ["id", "owner_id", "post_id", "comment"],
+    const commentList = await ReviewComment.findAll({
+      attributes: ["id", "userId", "postId", "comment", "updatedAt"],
       where: {
         postId,
       },
