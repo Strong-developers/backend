@@ -9,9 +9,9 @@ router.post("/posts", verifyToken, reviewCtrl.addReview);
 router.put("/posts/:postId",verifyToken, reviewCtrl.modifyReview);
 router.delete("/posts/:postId",verifyToken, reviewCtrl.removeReview);
 
-router.get("/posts/comments/:postId", reviewCtrl.getCommentList);
-router.post("/posts/comments/:postId",verifyToken, reviewCtrl.addComment);
-router.put("/posts/comments/:commentId",verifyToken, reviewCtrl.modifyComment);
-router.delete("/posts/comments/:commentId",verifyToken, reviewCtrl.removeComment);
+router.get("/posts/:postId/comments", reviewCtrl.getCommentList);
+router.post("/posts/:postId/comments",verifyToken, reviewCtrl.addComment);
+router.put("/posts/:postId/comments/:commentId",verifyToken, reviewCtrl.modifyComment);
+router.delete("/posts/:postId/comments/:commentId",verifyToken, reviewCtrl.removeComment);
 
 export default router;
