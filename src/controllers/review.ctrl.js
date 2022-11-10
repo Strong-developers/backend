@@ -84,8 +84,7 @@ export default {
         success: true,
         status: 200,
         message: "해당 게시물 댓글 불러오기 성공",
-        result: commentList,
-        commentPageCount,
+        result: { commentPageCount, commentList },
       });
     } catch (err) {
       next(err);
@@ -95,10 +94,10 @@ export default {
   // 댓글 작성
   async addComment(req, res, next) {
     const { postId } = req.params;
-    const { comment, ownerId } = req.body;
+    const { comment, userId } = req.body;
 
     try {
-      await reviewService.insertComment(postId, ownerId, comment);
+      await reviewService.insertComment(postId, userId, comment);
 
       res.status(201).json({
         success: true,
@@ -112,11 +111,11 @@ export default {
 
   // 댓글 수정
   async modifyComment(req, res, next) {
-    const { commentId } = req.params;
+    const { postId, commentId } = req.params;
     const { comment } = req.body;
 
     try {
-      await reviewService.updateComment(commentId, comment);
+      await reviewService.updateComment(postId, commentId, comment);
 
       res.status(201).json({
         success: true,
@@ -130,10 +129,10 @@ export default {
 
   // 댓글 삭제
   async removeComment(req, res, next) {
-    const { commentId } = req.params;
+    const { postId, commentId } = req.params;
 
     try {
-      await reviewService.deleteComment(commentId);
+      await reviewService.deleteComment(postId, commentId);
 
       res.status(201).json({
         success: true,

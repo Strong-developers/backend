@@ -6,7 +6,7 @@ import {
 } from "../utils/Constant";
 
 export default {
-   /**
+  /**
    * 후기 게시판 게시물의 글 개수 리턴
    *
    * @returns
@@ -25,9 +25,9 @@ export default {
 
   /**
    * 후기 게시판 게시물 페이지네이션
-   * 
-   * @param {number} page 
-   * @returns 
+   *
+   * @param {number} page
+   * @returns
    */
   async selectReview(page) {
     const reviews = await ReviewPost.findAll({
@@ -35,7 +35,7 @@ export default {
       include: [
         {
           model: User,
-          as: 'user',
+          as: "user",
           attributes: ["nickname", "role", "profileUrl", "id"],
         },
       ],
@@ -48,10 +48,10 @@ export default {
 
   /**
    * 후기 게시판 게시물 등록
-   * 
-   * @param {number} userId 
-   * @param {string} title 
-   * @param {string} description 
+   *
+   * @param {number} userId
+   * @param {string} title
+   * @param {string} description
    */
   async insertReview(userId, title, description) {
     if (!title.trim()) {
@@ -66,10 +66,10 @@ export default {
 
   /**
    * 후기 게시판 게시물 수정
-   * 
-   * @param {number} postId 
-   * @param {string} title 
-   * @param {string} description 
+   *
+   * @param {number} postId
+   * @param {string} title
+   * @param {string} description
    */
   async updateReview(postId, title, description) {
     if (!title.trim()) {
@@ -127,8 +127,8 @@ export default {
    * @returns
    */
   async selectComment(postId, page) {
-    const { commentList } = await ReviewComment.findAll({
-      attributes: ["id", "owner_id", "post_id", "comment"],
+    const commentList = await ReviewComment.findAll({
+      attributes: ["id", "userId", "postId", "comment", "updatedAt"],
       where: {
         postId,
       },
@@ -146,10 +146,14 @@ export default {
    * @param {number} ownerId
    * @param {string} comment
    */
-  async insertComment(postId, ownerId, comment) {
+  async insertComment(postId, userId, comment) {
+    if (!comment.trim()) {
+      throw ApiError.setBadRequest("댓글이 null이거나 공백입니다.");
+    }
+
     await ReviewComment.create({
       postId,
-      ownerId,
+      userId,
       comment,
     });
   },
@@ -157,15 +161,21 @@ export default {
   /**
    * 후기 게시판 게시물의 댓글 수정하는 서비스
    *
+   * @param {number} postId
    * @param {number} commentId
    * @param {string} comment
    */
-  async updateComment(commentId, comment) {
+  async updateComment(postId, commentId, comment) {
+    if (!comment.trim()) {
+      throw ApiError.setBadRequest("댓글이 null이거나 공백입니다.");
+    }
+
     await ReviewComment.update(
       { comment },
       {
         where: {
           id: commentId,
+          postId,
         },
       }
     );
@@ -174,12 +184,14 @@ export default {
   /**
    * 후기 게시판 게시물의 댓글 삭제하는 서비스
    *
+   * @param {number} postId
    * @param {number} commentId
    */
-  async deleteComment(commentId) {
+  async deleteComment(postId, commentId) {
     await ReviewComment.destroy({
       where: {
         id: commentId,
+        postId,
       },
       //force: true
     });
