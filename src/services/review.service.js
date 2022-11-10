@@ -1,4 +1,5 @@
 import { ReviewPost, ReviewComment, User } from "../models";
+import ApiError from "../utils/ApiError";
 import {
   REVIEW_COMMENT_PER_PAGE,
   REVIEW_POST_PER_PAGE,
@@ -9,10 +10,10 @@ export default {
     const reviewCount = await ReviewPost.count({});
 
     return (() => {
-      if (reviewCount % 12 === 0) {
-        return reviewCount / 12;
+      if (reviewCount % REVIEW_POST_PER_PAGE === 0) {
+        return reviewCount / REVIEW_POST_PER_PAGE;
       } else {
-        return Math.floor(reviewCount / 12) + 1;
+        return Math.floor(reviewCount / REVIEW_POST_PER_PAGE) + 1;
       }
     })();
   },
@@ -26,18 +27,32 @@ export default {
           attributes: ["nickname", "role", "profileUrl", "id"],
         },
       ],
-      offset: (page - 1) * 12,
-      limit: 12,
+      offset: (page - 1) * REVIEW_POST_PER_PAGE,
+      limit: REVIEW_POST_PER_PAGE,
     });
 
     return reviews;
   },
 
   async insertReview(userId, title, description) {
+    if (!title.trim()) {
+      throw ApiError.setBadRequest("타이틀이 null이거나 공백입니다.");
+    }
+    if (!description.trim()) {
+      throw ApiError.setBadRequest("내용이 null이거나 공백입니다.");
+    }
+
     await ReviewPost.create({ userId, title, description });
   },
 
   async updateReview(postId, title, description) {
+    if (!title.trim()) {
+      throw ApiError.setBadRequest("타이틀이 null이거나 공백입니다.");
+    }
+    if (!description.trim()) {
+      throw ApiError.setBadRequest("내용이 null이거나 공백입니다.");
+    }
+
     await ReviewPost.update(
       { title, description },
       {
