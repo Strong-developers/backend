@@ -36,22 +36,18 @@ ReviewPost.belongsTo(User, {
 });
 
 // User 모델과 Shelter 모델은 1 : 1 관계
-User.hasOne(Shelter, { foreignKey: "userId" });
-Shelter.belongsTo(User, { foreignKey: "userId" });
+User.hasOne(Shelter, { foreignKey: "userId", sourceKey: "id" });
+Shelter.belongsTo(User, { foreignKey: "userId", targetKey: "id" });
 
 // User 모델과 UserReservation 모델은 1 : N 관계
 User.hasMany(UserReservation, { foreignKey: "userId", sourceKey: "id" });
 UserReservation.belongsTo(User, { foreignKey: "userId", targetKey: "id" });
 
-/**
- * User 모델과 AvailableReservation 모델은 1 : N 관계
- */
+// User 모델과 AvailableReservation 모델은 1 : N 관계
 User.hasMany(AvailableReservation, { foreignKey: "userId", sourceKey: "id" });
 AvailableReservation.belongsTo(User, { foreignKey: "userId", targetKey: "id" });
 
-/**
- * Post 모델과 ReviewComment 모델은 1 : N 관계
- */
+// Post 모델과 ReviewComment 모델은 1 : N 관계
 ReviewPost.hasMany(ReviewComment, { foreignKey: "postId", sourceKey: "id" });
 ReviewComment.belongsTo(ReviewPost, { foreignKey: "postId", targetKey: "id" });
 

@@ -33,6 +33,6 @@ app.use("/shelter", feedRouter);
 // 에러처리 미들웨어
 app.use(errorMiddleware);
 
-app.listen(process.env.SERVER_PORT, async () => {
+app.listen(process.env.SERVER_PORT, () => {
   console.log("http://localhost:3002");
 });
