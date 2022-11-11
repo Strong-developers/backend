@@ -31,14 +31,6 @@ export default {
     return selectedPosts;
   },
 
-  // async getPostList(id) {
-  //   const foundPostList = await FeedPost.findAll({ where: { shelterId: id } });
-  //   if (!foundPostList) {
-  //     throw ApiError.setBadRequest("게시글이 존재하지 않습니다.");
-  //   }
-  //   return foundPostList;
-  // },
-
   async addPost(id, like, description) {
     if (!like) {
       throw ApiError.setBadRequest("좋아요 개수가 null이거나 공백입니다.");
