@@ -3,13 +3,16 @@ import { feedService } from "../services";
 export default {
   async getPostList(req, res, next) {
     const { id } = req.params;
+    const { page } = req.query;
     try {
-      const postList = await feedService.getPostList(id);
+      const feedPageCount = await feedService.countFeedPage(id);
+      const selectedPosts = await feedService.selectPosts(id, page);
+
       res.status(200).json({
         success: true,
         status: 200,
         message: "피드 게시글 목록 불러오기 성공",
-        result: postList,
+        result: { feedPageCount, selectedPosts },
       });
     } catch (err) {
       next(err);

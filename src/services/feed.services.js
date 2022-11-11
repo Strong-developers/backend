@@ -1,14 +1,43 @@
 import { FeedPost } from "../models";
 import ApiError from "../utils/ApiError";
+import { FEED_POST_PER_PAGE } from "../utils/Constant";
 
 export default {
-  async getPostList(id) {
-    const foundPostList = await FeedPost.findAll({ where: { shelterId: id } });
-    if (!foundPostList) {
+  async countFeedPage(id) {
+    const postCount = await FeedPost.count({
+      where: {
+        shelterId: id,
+      },
+    });
+    if (postCount % FEED_POST_PER_PAGE === 0) {
+      return postCount / FEED_POST_PER_PAGE;
+    } else {
+      return Math.floor(postCount / FEED_POST_PER_PAGE) + 1;
+    }
+  },
+
+  async selectPosts(id, page) {
+    const selectedPosts = await FeedPost.findAll({
+      where: { shelterId: id },
+      offset: (page - 1) * FEED_POST_PER_PAGE,
+      limit: FEED_POST_PER_PAGE,
+    });
+
+    console.log(selectedPosts);
+
+    if (!selectedPosts) {
       throw ApiError.setBadRequest("게시글이 존재하지 않습니다.");
     }
-    return foundPostList;
+    return selectedPosts;
   },
+
+  // async getPostList(id) {
+  //   const foundPostList = await FeedPost.findAll({ where: { shelterId: id } });
+  //   if (!foundPostList) {
+  //     throw ApiError.setBadRequest("게시글이 존재하지 않습니다.");
+  //   }
+  //   return foundPostList;
+  // },
 
   async addPost(id, like, description) {
     if (!like) {
