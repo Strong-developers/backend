@@ -2,7 +2,7 @@ import { DataTypes } from "sequelize";
 import sequelize from "../configs/sequelize";
 
 const ReviewComment = sequelize.define(
-  "Comment",
+  "ReviewComment",
   {
     comment: {
       type: DataTypes.STRING,
@@ -12,7 +12,7 @@ const ReviewComment = sequelize.define(
   {
     sequelize,
     timestamps: true,
-    tableName: "comments",
+    tableName: "reviewComments",
     charset: "utf8",
     collate: "utf8_general_ci",
   }

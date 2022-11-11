@@ -10,7 +10,40 @@ export default {
     return foundPostList;
   },
 
-  async addPost(id, likes, description) {
-    FeedPost.create({});
+  async addPost(id, like, description) {
+    if (!like) {
+      throw ApiError.setBadRequest("좋아요 개수가 null이거나 공백입니다.");
+    }
+    if (!description) {
+      throw ApiError.setBadRequest("게시글 내용이 null이거나 공백입니다.");
+    }
+
+    await FeedPost.create({
+      shelterId: id,
+      like,
+      description,
+    });
+  },
+
+  async modifyPost(id, postId, like, description) {
+    if (!like) {
+      throw ApiError.setBadRequest("좋아요 개수가 null이거나 공백입니다.");
+    }
+    if (!description) {
+      throw ApiError.setBadRequest("게시글 내용이 null이거나 공백입니다.");
+    }
+    await FeedPost.update(
+      { like, description },
+      { where: { id: postId, shelterId: id } }
+    );
+  },
+
+  async removePost(id, postId) {
+    await FeedPost.destroy({
+      where: {
+        id: postId,
+        shelterId: id,
+      },
+    });
   },
 };
