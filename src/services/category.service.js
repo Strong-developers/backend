@@ -4,8 +4,8 @@ import ApiError from "../utils/ApiError";
 export default {
   /**
    * 메인 카테고리 불러오기
-   * 
-   * @returns 
+   *
+   * @returns
    */
   async selectMainCategoryList() {
     const mainCategory = await MainCategory.findAll({

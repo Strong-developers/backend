@@ -3,7 +3,12 @@ import dotenv from "dotenv";
 import cors from "cors";
 import sequelize from "./src/configs/sequelize";
 import errorMiddleware from "./src/middlewares/error";
-import { categoryRouter, authRouter, reviewRouter } from "./src/routes";
+import {
+  categoryRouter,
+  authRouter,
+  reviewRouter,
+  feedRouter,
+} from "./src/routes";
 
 dotenv.config();
 
@@ -23,6 +28,7 @@ sequelize.sync({ sync: false });
 app.use("/category", categoryRouter);
 app.use("/auth", authRouter);
 app.use("/review", reviewRouter);
+app.use("/shelter", feedRouter);
 
 // 에러처리 미들웨어
 app.use(errorMiddleware);
