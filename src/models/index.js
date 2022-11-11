@@ -31,8 +31,8 @@ ReviewPost.belongsTo(User, { foreignKey: "userId", as: 'user', targetKey: "id" }
 /**
  * User 모델과 Shelter 모델은 1 : 1 관계
  */
-User.hasOne(Shelter, {foreignKey: 'userId'});
-Shelter.belongsTo(User, {foreignKey: 'userId'});
+User.hasOne(Shelter, {foreignKey: 'userId', sourceKey: 'id'});
+Shelter.belongsTo(User, {foreignKey: 'userId', targetKey: 'id'});
 
 /**
  * User 모델과 UserReservation 모델은 1 : N 관계
