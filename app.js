@@ -23,7 +23,7 @@ app.use(
   })
 );
 
-sequelize.sync({ sync: false });
+sequelize.sync({ alter: true });
 
 app.use("/category", categoryRouter);
 app.use("/auth", authRouter);
