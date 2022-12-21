@@ -21,29 +21,29 @@ export default {
 
   async addPost(req, res, next) {
     const { id } = req.params;
-    const { like, description } = req.body;
+    const { description } = req.body;
     try {
-      await feedService.addPost(id, like, description);
+      await feedService.addPost(id, description);
       res.status(201).json({
         success: true,
         status: 201,
-        message: "피드 게시글 작성 성공",
+        message: "Successfully CREATE a post.",
       });
     } catch (err) {
       next(err);
     }
   },
 
-  async modifyPost(req, res, next) {
+  async editPost(req, res, next) {
     const { id } = req.params;
     const { postId } = req.query;
-    const { like, description } = req.body;
+    const { description } = req.body;
     try {
-      await feedService.modifyPost(id, postId, like, description);
+      await feedService.editPost(id, postId, description);
       res.status(201).json({
         success: true,
         status: 201,
-        message: "피드 게시글 수정 성공",
+        message: "Successfully EDIT the post.",
       });
     } catch (err) {
       next(err);
@@ -58,7 +58,7 @@ export default {
       res.status(201).json({
         success: true,
         status: 201,
-        message: "피드 게시글 삭제 성공",
+        message: "Successfully DELETE the post.",
       });
     } catch (err) {
       next(err);

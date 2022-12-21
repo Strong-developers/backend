@@ -9,11 +9,9 @@ export default {
         shelterId: id,
       },
     });
-    if (postCount % FEED_POST_PER_PAGE === 0) {
+    if (postCount % FEED_POST_PER_PAGE === 0)
       return postCount / FEED_POST_PER_PAGE;
-    } else {
-      return Math.floor(postCount / FEED_POST_PER_PAGE) + 1;
-    }
+    return Math.floor(postCount / FEED_POST_PER_PAGE) + 1;
   },
 
   async selectPosts(id, page) {
@@ -23,44 +21,52 @@ export default {
       limit: FEED_POST_PER_PAGE,
     });
 
-    console.log(selectedPosts);
+    if (!selectedPosts) throw ApiError.setBadRequest("Post does not exist.");
 
-    if (!selectedPosts) {
-      throw ApiError.setBadRequest("게시글이 존재하지 않습니다.");
-    }
     return selectedPosts;
   },
 
-  async addPost(id, like, description) {
-    if (!like) {
-      throw ApiError.setBadRequest("좋아요 개수가 null이거나 공백입니다.");
-    }
-    if (!description) {
-      throw ApiError.setBadRequest("게시글 내용이 null이거나 공백입니다.");
-    }
+  async addPost(id, description) {
+    if (!id) throw ApiError.setBadRequest("Shelter ID is required.");
+    if (!description)
+      throw ApiError.setBadRequest("Post's description is required.");
 
-    await FeedPost.create({
+    return FeedPost.create({
       shelterId: id,
-      like,
       description,
     });
   },
 
-  async modifyPost(id, postId, like, description) {
-    if (!like) {
-      throw ApiError.setBadRequest("좋아요 개수가 null이거나 공백입니다.");
-    }
+  async findOnePostWithID(id, postId) {
+    if (!id) throw ApiError.setBadRequest("Shelter ID is required.");
+    if (!postId) throw ApiError.setBadRequest("Post ID is required.");
+
+    const foundPost = await FeedPost.findOne({
+      where: { id: postId, shelterId: id },
+    });
+
+    if (!foundPost) throw ApiError.setBadRequest("Post does not exist.");
+
+    return foundPost;
+  },
+
+  async editPost(id, postId, description) {
     if (!description) {
-      throw ApiError.setBadRequest("게시글 내용이 null이거나 공백입니다.");
+      throw ApiError.setBadRequest("Post's description is required.");
     }
-    await FeedPost.update(
-      { like, description },
+
+    await this.findOnePostWithID(id, postId);
+
+    return FeedPost.update(
+      { description },
       { where: { id: postId, shelterId: id } }
     );
   },
 
   async removePost(id, postId) {
-    await FeedPost.destroy({
+    await this.findOnePostWithID(id, postId);
+
+    return FeedPost.destroy({
       where: {
         id: postId,
         shelterId: id,
