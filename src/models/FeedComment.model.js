@@ -4,7 +4,7 @@ import { DataTypes } from "sequelize";
 const FeedComment = sequelize.define(
   "FeedComment",
   {
-    comment: {
+    description: {
       type: DataTypes.TEXT,
       allowNull: false,
     },
