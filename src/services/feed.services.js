@@ -59,7 +59,7 @@ export default {
 
     const foundPost = await this.findOnePostWithID(id, postId);
     if (foundPost.userId !== userId)
-      throw ApiError.setBadRequest("Only the writer can edit the post.");
+      throw ApiError.setForbidden("Only the writer can edit the post.");
 
     return FeedPost.update(
       { description },
@@ -70,12 +70,13 @@ export default {
   async removePost(id, userId, postId) {
     const foundPost = await this.findOnePostWithID(id, postId);
     if (foundPost.userId !== userId)
-      throw ApiError.setBadRequest("Only the writer can delete the post.");
+      throw ApiError.setForbidden("Only the writer can delete the post.");
 
     return FeedPost.destroy({
       where: {
         id: postId,
         shelterId: id,
+        userId,
       },
     });
   },

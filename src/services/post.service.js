@@ -29,4 +29,53 @@ export default {
 
     return foundComments;
   },
+
+  async addComment(id, userId, description) {
+    if (!id) throw ApiError.setBadRequest("Post ID is required.");
+    if (!userId) throw ApiError.setBadRequest("User ID is required.");
+    if (!description)
+      throw ApiError.setBadRequest("Comment description is required.");
+
+    return FeedComment.create({ feedPostId: id, userId, description });
+  },
+
+  async findOneCommentWithID(id, commentId) {
+    if (!id) throw ApiError.setBadRequest("Post ID is required.");
+    if (!commentId) throw ApiError.setBadRequest("Comment ID is required.");
+
+    const foundComment = await FeedComment.findOne({
+      where: { id: commentId, feedPostId: id },
+    });
+
+    if (!foundComment) throw ApiError.setBadRequest("Comment does not exist.");
+
+    return foundComment;
+  },
+
+  async editComment(id, userId, commentId, description) {
+    if (!userId) throw ApiError.setBadRequest("User ID is required.");
+    if (!description)
+      throw ApiError.setBadRequest("Comment description is required.");
+
+    const foundComment = await this.findOneCommentWithID(id, commentId);
+    if (foundComment.userId !== userId)
+      throw ApiError.setForbidden("Only the writer can edit the comment.");
+
+    return FeedComment.update(
+      { description },
+      { where: { id: commentId, feedPostId: id, userId } }
+    );
+  },
+
+  async removeComment(id, userId, commentId) {
+    if (!userId) throw ApiError.setBadRequest("User ID is required.");
+
+    const foundComment = await this.findOneCommentWithID(id, commentId);
+    if (foundComment.userId !== userId)
+      throw ApiError.setForbidden("Only the writer can delete the comment.");
+
+    return FeedComment.destroy({
+      where: { id: commentId, feedPostId: id, userId },
+    });
+  },
 };
