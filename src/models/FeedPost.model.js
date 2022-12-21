@@ -4,9 +4,9 @@ import sequelize from "../configs/sequelize";
 const FeedPost = sequelize.define(
   "FeedPost",
   {
-    like: {
+    likes: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      defaultValue: 0,
     },
     description: {
       type: DataTypes.TEXT,

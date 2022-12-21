@@ -1,16 +1,12 @@
 import express from "express";
 import { feedCtrl } from "../controllers";
+import verifyToken from "../middlewares/verifyToken";
 
 const router = express.Router();
 
-router.get("/:id/posts", feedCtrl.getPostList);
-router.post("/:id/posts", feedCtrl.addPost);
-router.put("/:id", feedCtrl.modifyPost);
-router.delete("/:id", feedCtrl.removePost);
-
-// router.get("/comments/:postId");
-// router.post("/comments/:postId");
-// router.put("/comments/:commentId");
-// router.delete("/comments/:commentId");
+router.get("/:id", feedCtrl.getPostList);
+router.post("/:id", verifyToken, feedCtrl.addPost);
+router.put("/:id", verifyToken, feedCtrl.editPost);
+router.delete("/:id", verifyToken, feedCtrl.removePost);
 
 export default router;
