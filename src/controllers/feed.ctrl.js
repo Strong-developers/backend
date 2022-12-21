@@ -11,7 +11,7 @@ export default {
       res.status(200).json({
         success: true,
         status: 200,
-        message: "피드 게시글 목록 불러오기 성공",
+        message: "Successfully GET the posts.",
         result: { feedPageCount, selectedPosts },
       });
     } catch (err) {
