@@ -22,8 +22,9 @@ export default {
   async addPost(req, res, next) {
     const { id } = req.params;
     const { description } = req.body;
+    const userId = req.userId;
     try {
-      await feedService.addPost(id, description);
+      await feedService.addPost(id, userId, description);
       res.status(201).json({
         success: true,
         status: 201,
@@ -38,8 +39,9 @@ export default {
     const { id } = req.params;
     const { postId } = req.query;
     const { description } = req.body;
+    const userId = req.userId;
     try {
-      await feedService.editPost(id, postId, description);
+      await feedService.editPost(id, userId, postId, description);
       res.status(201).json({
         success: true,
         status: 201,
@@ -53,8 +55,9 @@ export default {
   async removePost(req, res, next) {
     const { id } = req.params;
     const { postId } = req.query;
+    const userId = req.userId;
     try {
-      await feedService.removePost(id, postId);
+      await feedService.removePost(id, userId, postId);
       res.status(201).json({
         success: true,
         status: 201,

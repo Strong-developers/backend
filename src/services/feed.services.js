@@ -26,13 +26,15 @@ export default {
     return selectedPosts;
   },
 
-  async addPost(id, description) {
+  async addPost(id, userId, description) {
     if (!id) throw ApiError.setBadRequest("Shelter ID is required.");
+    if (!userId) throw ApiError.setBadRequest("User ID is required.");
     if (!description)
       throw ApiError.setBadRequest("Post's description is required.");
 
     return FeedPost.create({
       shelterId: id,
+      userId,
       description,
     });
   },
@@ -50,21 +52,25 @@ export default {
     return foundPost;
   },
 
-  async editPost(id, postId, description) {
+  async editPost(id, userId, postId, description) {
     if (!description) {
       throw ApiError.setBadRequest("Post's description is required.");
     }
 
-    await this.findOnePostWithID(id, postId);
+    const foundPost = await this.findOnePostWithID(id, postId);
+    if (foundPost.userId !== userId)
+      throw ApiError.setBadRequest("Only the writer can edit the post.");
 
     return FeedPost.update(
       { description },
-      { where: { id: postId, shelterId: id } }
+      { where: { id: postId, shelterId: id, userId } }
     );
   },
 
-  async removePost(id, postId) {
-    await this.findOnePostWithID(id, postId);
+  async removePost(id, userId, postId) {
+    const foundPost = await this.findOnePostWithID(id, postId);
+    if (foundPost.userId !== userId)
+      throw ApiError.setBadRequest("Only the writer can delete the post.");
 
     return FeedPost.destroy({
       where: {
