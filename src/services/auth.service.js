@@ -1,44 +1,109 @@
-import { User } from "../models";
+import { Shelter, User } from "../models";
 import bcrypt from "bcrypt";
 import ApiError from "../utils/ApiError";
 import jwt from "jsonwebtoken";
 
 export default {
-  // 회원가입
-  async createUser(email, password, nickname, role) {
-    // 중복 이메일, 닉네임 체크
-    const existEmail = await User.findOne({ where: { email } });
-    const existNickname = await User.findOne({ where: { nickname } });
-    if (existEmail) {
-      throw ApiError.setBadRequest("중복된 이메일이 존재합니다.");
+  async emailAndNicknameValidation(email, nickname) {
+    const isEmailExist = await User.findOne({ where: { email } });
+
+    const isNicknameExist = await User.findOne({ where: { nickname } });
+
+    if (isEmailExist) {
+      throw ApiError.setBadRequest("Email already exist.");
     }
-    if (existNickname) {
-      throw ApiError.setBadRequest("중복된 닉네임이 존재합니다.");
+    if (isNicknameExist) {
+      throw ApiError.setBadRequest("Nickname already exist.");
     }
 
-    // 비밀번호 해싱
-    const hashedpassword = await bcrypt.hash(
+    return;
+  },
+
+  async passwordHashing(password) {
+    const hashedPassword = await bcrypt.hash(
       password,
       Number.parseInt(process.env.SALTROUNDS)
     );
 
+    return hashedPassword;
+  },
+
+  async createNormalUser(email, password, nickname, role) {
+    if (!email || !password || !nickname || !role)
+      throw ApiError.setBadRequest("All fields are required.");
+
+    if (role != 1)
+      throw ApiError.setBadRequest("API for registering a normal user.");
+
+    await this.emailAndNicknameValidation(email, nickname);
+
+    const hashedPassword = await this.passwordHashing(password);
+
     return User.create({
       email,
-      password: hashedpassword,
+      password: hashedPassword,
       nickname,
       role,
     });
   },
 
-  // 로그인
+  async createShelter(
+    email,
+    password,
+    nickname,
+    role,
+    name,
+    region,
+    phoneNumber,
+    description,
+    caution
+  ) {
+    if (
+      !email ||
+      !password ||
+      !nickname ||
+      !role ||
+      !name ||
+      !region ||
+      !phoneNumber ||
+      !description ||
+      !caution
+    )
+      throw ApiError.setBadRequest("All fields are required.");
+
+    await this.emailAndNicknameValidation(email, nickname);
+
+    const hashedPassword = await this.passwordHashing(password);
+
+    const createdShelterUserPart = await User.create({
+      email,
+      password: hashedPassword,
+      nickname,
+      role,
+    });
+
+    return Shelter.create({
+      name,
+      region,
+      phoneNumber,
+      description,
+      caution,
+      userId: createdShelterUserPart.id,
+    });
+  },
+
   async checkUser(email, password) {
-    // 이메일 가입여부 확인
-    const existUser = await User.findOne({ where: { email } });
-    if (!existUser) {
-      throw ApiError.setBadRequest("이메일이 존재하지 않습니다.");
+    if (!email) throw ApiError.setBadRequest("Email is required.");
+    if (!password) throw ApiError.setBadRequest("Password is required.");
+
+    const foundUser = await User.findOne({
+      where: { email },
+      attributes: ["id", "email", "nickname", "role"],
+    });
+    if (!foundUser) {
+      throw ApiError.setBadRequest("Email does not exist.");
     }
 
-    // 비밀번호 일치여부 확인
     const hashedpassword = await bcrypt.hash(
       password,
       Number.parseInt(process.env.SALTROUNDS)
@@ -46,15 +111,10 @@ export default {
     const isCorrectPassword = await bcrypt.compare(password, hashedpassword);
 
     if (!isCorrectPassword) {
-      throw ApiError.setBadRequest("비밀번호가 일치하지 않습니다.");
+      throw ApiError.setBadRequest("Password is not correct.");
     }
 
-    return {
-      id: existUser.id,
-      email: existUser.email,
-      nickname: existUser.nickname,
-      role: existUser.role,
-    };
+    return foundUser;
   },
 
   // Access Token 생성

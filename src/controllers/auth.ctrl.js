@@ -1,26 +1,15 @@
 import { authService } from "../services";
 
 export default {
-  async register(req, res, next) {
+  async registerNormalUser(req, res, next) {
     const { email, password, nickname, role } = req.body;
     try {
-      const createdUser = await authService.createUser(
-        email,
-        password,
-        nickname,
-        role
-      );
+      await authService.createNormalUser(email, password, nickname, role);
 
       res.status(201).json({
         success: true,
         status: 201,
-        message: "회원가입 완료",
-        result: {
-          id: createdUser.id,
-          email: createdUser.email,
-          nickname: createdUser.nickname,
-          role: createdUser.role,
-        },
+        message: "Successfully REGISTERED a normal user.",
       });
     } catch (err) {
       next(err);
@@ -36,7 +25,7 @@ export default {
       res.status(200).json({
         success: true,
         status: 200,
-        message: "로그인 성공",
+        message: "LOGIN success.",
         result: {
           ...foundUser,
           token,

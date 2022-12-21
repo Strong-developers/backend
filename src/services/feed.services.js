@@ -1,8 +1,21 @@
-import { FeedPost } from "../models";
+import { FeedPost, Shelter, User } from "../models";
 import ApiError from "../utils/ApiError";
 import { FEED_POST_PER_PAGE } from "../utils/Constant";
 
 export default {
+  async getShelterInformation(id) {
+    if (!id) throw ApiError.setBadRequest("Shelter ID is required.");
+
+    const foundShelter = await Shelter.findOne({
+      where: { id },
+      include: User,
+    });
+
+    if (!foundShelter) throw ApiError.setBadRequest("Shelter does not exist.");
+
+    return foundShelter;
+  },
+
   async countFeedPage(id) {
     const postCount = await FeedPost.count({
       where: {
@@ -27,10 +40,11 @@ export default {
   },
 
   async addPost(id, userId, description) {
-    if (!id) throw ApiError.setBadRequest("Shelter ID is required.");
     if (!userId) throw ApiError.setBadRequest("User ID is required.");
     if (!description)
       throw ApiError.setBadRequest("Post's description is required.");
+
+    const foundShelter = await this.getShelterInformation(id);
 
     return FeedPost.create({
       shelterId: id,

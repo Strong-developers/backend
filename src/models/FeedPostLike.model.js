@@ -3,12 +3,7 @@ import { DataTypes } from "sequelize";
 
 const FeedPostLike = sequelize.define(
   "FeedPostLike",
-  {
-    likes: {
-      type: DataTypes.INTEGER,
-      defaultValue: 0,
-    },
-  },
+  {},
   {
     sequelize,
     timestamps: false,

@@ -7,12 +7,13 @@ export default {
     try {
       const feedPageCount = await feedService.countFeedPage(id);
       const selectedPosts = await feedService.selectPosts(id, page);
+      const foundShelter = await feedService.getShelterInformation(id);
 
       res.status(200).json({
         success: true,
         status: 200,
         message: "Successfully GET the posts.",
-        result: { feedPageCount, selectedPosts },
+        result: { feedPageCount, selectedPosts, foundShelter },
       });
     } catch (err) {
       next(err);
