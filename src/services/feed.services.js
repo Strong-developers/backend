@@ -62,13 +62,22 @@ export default {
     if (!id) throw ApiError.setBadRequest("Shelter ID is required.");
     if (!postId) throw ApiError.setBadRequest("Post ID is required.");
 
-    const foundPost = await FeedPost.findOne({
+    const foundPostWithShelterInfo = await FeedPost.findOne({
       where: { id: postId, shelterId: id },
+      include: Shelter,
+      raw: true,
     });
 
-    if (!foundPost) throw ApiError.setBadRequest("Post does not exist.");
+    const foundShelterWithUserInfo = await Shelter.findOne({
+      where: { id: foundPostWithShelterInfo.shelterId },
+      include: User,
+      raw: true,
+    });
 
-    return foundPost;
+    if (!foundPostWithShelterInfo)
+      throw ApiError.setBadRequest("Post does not exist.");
+
+    return { foundPostWithShelterInfo, foundShelterWithUserInfo };
   },
 
   async editPost(id, userId, postId, description) {
@@ -76,26 +85,37 @@ export default {
       throw ApiError.setBadRequest("Post's description is required.");
     }
 
-    const foundPost = await this.findOnePostWithID(id, postId);
-    if (foundPost.userId !== userId)
-      throw ApiError.setForbidden("Only the writer can edit the post.");
+    const { _, foundShelterWithUserInfo } = await this.findOnePostWithID(
+      id,
+      postId
+    );
+    console.log("🤢", foundShelterWithUserInfo);
+
+    if (foundShelterWithUserInfo.userId !== userId)
+      throw ApiError.setForbidden(
+        "Only the writer or the shelter admin can edit the post."
+      );
 
     return FeedPost.update(
       { description },
-      { where: { id: postId, shelterId: id, userId } }
+      { where: { id: postId, shelterId: id } }
     );
   },
 
   async removePost(id, userId, postId) {
-    const foundPost = await this.findOnePostWithID(id, postId);
-    if (foundPost.userId !== userId)
-      throw ApiError.setForbidden("Only the writer can delete the post.");
+    const { _, foundShelterWithUserInfo } = await this.findOnePostWithID(
+      id,
+      postId
+    );
+    if (foundShelterWithUserInfo.userId !== userId)
+      throw ApiError.setForbidden(
+        "Only the writer or the shelter admin can delete the post."
+      );
 
     return FeedPost.destroy({
       where: {
         id: postId,
         shelterId: id,
-        userId,
       },
     });
   },

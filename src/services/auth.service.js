@@ -100,6 +100,7 @@ export default {
     const foundUser = await User.findOne({
       where: { email },
       attributes: ["id", "email", "nickname", "role"],
+      raw: true,
     });
     if (!foundUser) {
       throw ApiError.setBadRequest("Email does not exist.");
