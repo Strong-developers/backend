@@ -46,6 +46,11 @@ export default {
 
     const foundShelter = await this.getShelterInformation(id);
 
+    if (foundShelter.userId !== userId)
+      throw ApiError.setForbidden(
+        "Only the shelter administrator can create a post on the feed."
+      );
+
     return FeedPost.create({
       shelterId: id,
       userId,

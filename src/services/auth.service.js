@@ -7,11 +7,12 @@ export default {
   async emailAndNicknameValidation(email, nickname) {
     const isEmailExist = await User.findOne({ where: { email } });
 
-    const isNicknameExist = await User.findOne({ where: { nickname } });
-
     if (isEmailExist) {
       throw ApiError.setBadRequest("Email already exist.");
     }
+
+    const isNicknameExist = await User.findOne({ where: { nickname } });
+
     if (isNicknameExist) {
       throw ApiError.setBadRequest("Nickname already exist.");
     }
