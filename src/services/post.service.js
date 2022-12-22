@@ -1,4 +1,4 @@
-import { FeedComment } from "../models";
+import { FeedComment, FeedPost, FeedPostLike } from "../models";
 import ApiError from "../utils/ApiError";
 import { FEED_COMMENT_PET_PAGE } from "../utils/Constant";
 
@@ -77,5 +77,15 @@ export default {
     return FeedComment.destroy({
       where: { id: commentId, feedPostId: id, userId },
     });
+  },
+
+  async likePost(id, userId) {
+    if (!id) throw ApiError.setBadRequest("Post ID is required.");
+    if (!userId) throw ApiError.setBadRequest("User ID is required.");
+
+    const foundPost = await FeedPost.findOne({ where: { id } });
+    if (!foundPost) throw ApiError.setBadRequest("Post does not exist.");
+
+    await FeedPostLike.create("");
   },
 };

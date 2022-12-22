@@ -8,6 +8,7 @@ import UserReservation from "./UserReservation.model";
 import AvailableReservation from "./AvailableReservation.model";
 import FeedPost from "./FeedPost.model";
 import FeedComment from "./FeedComment.model";
+import FeedPostLike from "./FeedPostLike.model";
 
 // Shelter 모델과 FeedPost 모델은 1:N 관계
 Shelter.hasMany(FeedPost, { foreignKey: "shelterId", sourceKey: "id" });
@@ -64,13 +65,17 @@ AvailableReservation.belongsToMany(UserReservation, {
 FeedPost.hasMany(FeedComment, { foreignKey: "feedPostId", sourceKey: "id" });
 FeedComment.belongsTo(FeedPost, { foreignKey: "feedPostId", targetKey: "id" });
 
-// User 모델과 FeedPost 모델은 1 : N
-User.hasMany(FeedPost, { foreignKey: "userId", sourceKey: "id" });
-FeedPost.belongsTo(User, { foreignKey: "userId", targetKey: "id" });
-
 // User 모델과 FeedComment 모델은 1 : N
 User.hasMany(FeedComment, { foreignKey: "userId", sourceKey: "id" });
 FeedComment.belongsTo(User, { foreignKey: "userId", targetKey: "id" });
+
+// User 모델과 FeedPostLike 모델은 1 : N
+User.hasMany(FeedPostLike, { foreignKey: "userId", sourceKey: "id" });
+FeedPostLike.belongsTo(User, { foreignKey: "userId", targetKey: "id" });
+
+// FeedPost 모델과 FeedPostLike 모델은 1: N
+FeedPost.hasMany(FeedPostLike, { foreignKey: "feedPostId", sourceKey: "id" });
+FeedPostLike.belongsTo(FeedPost, { foreignKey: "feedPostId", targetKey: "id" });
 
 export {
   MainCategory,
@@ -83,4 +88,5 @@ export {
   AvailableReservation,
   FeedPost,
   FeedComment,
+  FeedPostLike,
 };
