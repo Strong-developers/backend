@@ -1,6 +1,6 @@
 import { FeedComment, FeedPost, FeedPostLike } from "../models";
 import ApiError from "../utils/ApiError";
-import { FEED_COMMENT_PET_PAGE } from "../utils/Constant";
+import { FEED_COMMENT_PER_PAGE } from "../utils/Constant";
 
 export default {
   async countCommentPage(id) {
@@ -10,9 +10,9 @@ export default {
       where: { feedPostId: id },
     });
 
-    if (totalComments % FEED_COMMENT_PET_PAGE === 0)
-      return totalComments / FEED_COMMENT_PET_PAGE;
-    return Math.floor(totalComments / FEED_COMMENT_PET_PAGE) + 1;
+    if (totalComments % FEED_COMMENT_PER_PAGE === 0)
+      return totalComments / FEED_COMMENT_PER_PAGE;
+    return Math.floor(totalComments / FEED_COMMENT_PER_PAGE) + 1;
   },
 
   async getSelectedComments(id, page) {
@@ -21,8 +21,8 @@ export default {
 
     const foundComments = await FeedComment.findAll({
       where: { feedPostId: id },
-      offset: (page - 1) * FEED_COMMENT_PET_PAGE,
-      limit: FEED_COMMENT_PET_PAGE,
+      offset: (page - 1) * FEED_COMMENT_PER_PAGE,
+      limit: FEED_COMMENT_PER_PAGE,
     });
 
     if (!foundComments) throw ApiError.setBadRequest("Comment does not exist.");
