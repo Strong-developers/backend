@@ -9,6 +9,7 @@ import AvailableReservation from "./AvailableReservation.model";
 import FeedPost from "./FeedPost.model";
 import FeedComment from "./FeedComment.model";
 import FeedPostLike from "./FeedPostLike.model";
+import ReservationMapping from "./ReservationMapping.model";
 
 // Shelter 모델과 FeedPost 모델은 1:N 관계
 Shelter.hasMany(FeedPost, {
@@ -121,6 +122,26 @@ FeedPost.hasMany(FeedPostLike, {
   onDelete: "CASCADE",
 });
 FeedPostLike.belongsTo(FeedPost, { foreignKey: "feedPostId", targetKey: "id" });
+
+AvailableReservation.hasMany(ReservationMapping, {
+  foreignKey: "reservationId",
+  sourceKey: "id",
+  onDelete: "CASCADE",
+});
+ReservationMapping.belongsTo(AvailableReservation, {
+  foreignKey: "reservationId",
+  targetKey: "id",
+});
+
+UserReservation.hasMany(ReservationMapping, {
+  foreignKey: "userReservationId",
+  sourceKey: "id",
+  onDelete: "CASCADE",
+});
+ReservationMapping.belongsTo(UserReservation, {
+  foreignKey: "userReservationId",
+  targetKey: "id",
+});
 
 export {
   MainCategory,
