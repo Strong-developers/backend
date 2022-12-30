@@ -69,13 +69,9 @@ FeedComment.belongsTo(FeedPost, { foreignKey: "feedPostId", targetKey: "id" });
 User.hasMany(FeedComment, { foreignKey: "userId", sourceKey: "id" });
 FeedComment.belongsTo(User, { foreignKey: "userId", targetKey: "id" });
 
-// User 모델과 FeedPostLike 모델은 1 : N
-User.hasMany(FeedPostLike, { foreignKey: "userId", sourceKey: "id" });
-FeedPostLike.belongsTo(User, { foreignKey: "userId", targetKey: "id" });
-
-// FeedPost 모델과 FeedPostLike 모델은 1: N
-FeedPost.hasMany(FeedPostLike, { foreignKey: "feedPostId", sourceKey: "id" });
-FeedPostLike.belongsTo(FeedPost, { foreignKey: "feedPostId", targetKey: "id" });
+// User 모델과 FeedPost 모델은 N : M
+User.belongsToMany(FeedPost, { through: FeedPostLike });
+FeedPost.belongsToMany(User, { through: FeedPostLike });
 
 export {
   MainCategory,
