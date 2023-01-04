@@ -94,22 +94,25 @@ export default {
     const { foundPost, foundUser } = await this.findUserAndPostById(id, userId);
 
     const isLikeHistoryExist = await foundUser.hasFeedPost(foundPost);
-
-    console.log("🤢", isLikeHistoryExist);
     if (isLikeHistoryExist)
       throw ApiError.setBadRequest("This user already LIKED the post.");
 
-    return foundUser.addFeedPost(foundPost);
+    await foundUser.addFeedPost(foundPost);
+    await foundPost.increment("likes");
+
+    return;
   },
 
   async undoLikePost(id, userId) {
     const { foundPost, foundUser } = await this.findUserAndPostById(id, userId);
 
     const isLikeHistoryExist = await foundUser.hasFeedPost(foundPost);
-
     if (!isLikeHistoryExist)
       throw ApiError.setBadRequest("This user did not LIKED the post.");
 
-    return foundUser.removeFeedPost(foundPost);
+    await foundUser.removeFeedPost(foundPost);
+    await foundPost.decrement("likes");
+
+    return;
   },
 };
