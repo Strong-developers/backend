@@ -1,4 +1,5 @@
-import { FeedPost, Shelter, User } from "../models";
+import sequelize from "../configs/sequelize";
+import { FeedComment, FeedPost, Shelter, User } from "../models";
 import ApiError from "../utils/ApiError";
 import { FEED_POST_PER_PAGE } from "../utils/Constant";
 
@@ -32,6 +33,7 @@ export default {
       where: { shelterId: id },
       offset: (page - 1) * FEED_POST_PER_PAGE,
       limit: FEED_POST_PER_PAGE,
+      include: FeedComment,
     });
 
     if (!selectedPosts) throw ApiError.setBadRequest("Post does not exist.");

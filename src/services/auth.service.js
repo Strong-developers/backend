@@ -59,18 +59,19 @@ export default {
     description,
     caution
   ) {
-    if (
-      !email ||
-      !password ||
-      !nickname ||
-      !role ||
-      !name ||
-      !region ||
-      !phoneNumber ||
-      !description ||
-      !caution
-    )
-      throw ApiError.setBadRequest("All fields are required.");
+    const isValid = [
+      email,
+      password,
+      nickname,
+      role,
+      name,
+      region,
+      phoneNumber,
+      description,
+      caution,
+    ].every((item) => item);
+
+    if (!isValid) throw ApiError.setBadRequest("All fields are required.");
 
     await this.emailAndNicknameValidation(email, nickname);
 

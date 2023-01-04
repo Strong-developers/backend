@@ -1,6 +1,7 @@
-import { FeedComment, FeedPost, FeedPostLike } from "../models";
+import { where } from "sequelize";
+import { FeedComment, FeedPost, User } from "../models";
 import ApiError from "../utils/ApiError";
-import { FEED_COMMENT_PET_PAGE } from "../utils/Constant";
+import { FEED_COMMENT_PER_PAGE } from "../utils/Constant";
 
 export default {
   async countCommentPage(id) {
@@ -10,9 +11,9 @@ export default {
       where: { feedPostId: id },
     });
 
-    if (totalComments % FEED_COMMENT_PET_PAGE === 0)
-      return totalComments / FEED_COMMENT_PET_PAGE;
-    return Math.floor(totalComments / FEED_COMMENT_PET_PAGE) + 1;
+    if (totalComments % FEED_COMMENT_PER_PAGE === 0)
+      return totalComments / FEED_COMMENT_PER_PAGE;
+    return Math.floor(totalComments / FEED_COMMENT_PER_PAGE) + 1;
   },
 
   async getSelectedComments(id, page) {
@@ -21,8 +22,8 @@ export default {
 
     const foundComments = await FeedComment.findAll({
       where: { feedPostId: id },
-      offset: (page - 1) * FEED_COMMENT_PET_PAGE,
-      limit: FEED_COMMENT_PET_PAGE,
+      offset: (page - 1) * FEED_COMMENT_PER_PAGE,
+      limit: FEED_COMMENT_PER_PAGE,
     });
 
     if (!foundComments) throw ApiError.setBadRequest("Comment does not exist.");
@@ -79,13 +80,39 @@ export default {
     });
   },
 
-  async likePost(id, userId) {
-    if (!id) throw ApiError.setBadRequest("Post ID is required.");
+  async findUserAndPostById(postId, userId) {
+    if (!postId) throw ApiError.setBadRequest("Post ID is required.");
     if (!userId) throw ApiError.setBadRequest("User ID is required.");
 
-    const foundPost = await FeedPost.findOne({ where: { id } });
-    if (!foundPost) throw ApiError.setBadRequest("Post does not exist.");
+    const foundPost = await FeedPost.findByPk(postId);
+    const foundUser = await User.findByPk(userId);
 
-    await FeedPostLike.create("");
+    return { foundPost, foundUser };
+  },
+
+  async likePost(id, userId) {
+    const { foundPost, foundUser } = await this.findUserAndPostById(id, userId);
+
+    const isLikeHistoryExist = await foundUser.hasFeedPost(foundPost);
+    if (isLikeHistoryExist)
+      throw ApiError.setBadRequest("This user already LIKED the post.");
+
+    await foundUser.addFeedPost(foundPost);
+    await foundPost.increment("likes");
+
+    return;
+  },
+
+  async undoLikePost(id, userId) {
+    const { foundPost, foundUser } = await this.findUserAndPostById(id, userId);
+
+    const isLikeHistoryExist = await foundUser.hasFeedPost(foundPost);
+    if (!isLikeHistoryExist)
+      throw ApiError.setBadRequest("This user did not LIKED the post.");
+
+    await foundUser.removeFeedPost(foundPost);
+    await foundPost.decrement("likes");
+
+    return;
   },
 };
