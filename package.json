@@ -28,6 +28,7 @@
     "jsonwebtoken": "^8.5.1",
     "mysql2": "^2.3.3",
     "sequelize": "^6.25.3",
+    "sequelize-cli": "^6.5.2",
     "xlsx": "^0.18.5"
   },
   "devDependencies": {

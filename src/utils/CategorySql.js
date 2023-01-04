@@ -1,6 +1,6 @@
 // 메인 - 서브 카테고리 데이터 Insert
 // 임시 파일, 나중에 삭제할 것
-
+import { User } from "../models";
 // import { MainCategory, SubCategory } from "../models";
 
 // export default (() => {
@@ -35,5 +35,17 @@
 //   SubCategory.create({parent_id: 4, name: "채팅내역", path: '/chatlog'});
 //   SubCategory.create({parent_id: 4, name: "개인정보수정", path: '/modification'});
 //   SubCategory.create({parent_id: 4, name: "회원탈퇴", path: '/drop'});
-  
+
+// })();
+
+// export default (() => {
+//   for (let i = 1; i <= 646; i++) {
+//     User.create({
+//       email: `shelter${i}@gmail.com`,
+//       password: `shelter${i}a1s2d3`,
+//       nickname: `shelter${i}`,
+//       role: 2,
+//       profileUrl: `https://img.hani.co.kr/imgdb/resize/2018/0924/00500279_20180924.JPG`,
+//     });
+//   }
 // })();
