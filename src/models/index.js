@@ -8,7 +8,6 @@ import UserReservation from "./UserReservation.model";
 import AvailableReservation from "./AvailableReservation.model";
 import FeedPost from "./FeedPost.model";
 import FeedComment from "./FeedComment.model";
-import FeedPostLike from "./FeedPostLike.model";
 
 // Shelter 모델과 FeedPost 모델은 1:N 관계
 Shelter.hasMany(FeedPost, { foreignKey: "shelterId", sourceKey: "id" });
@@ -70,8 +69,18 @@ User.hasMany(FeedComment, { foreignKey: "userId", sourceKey: "id" });
 FeedComment.belongsTo(User, { foreignKey: "userId", targetKey: "id" });
 
 // User 모델과 FeedPost 모델은 N : M
-User.belongsToMany(FeedPost, { through: FeedPostLike });
-FeedPost.belongsToMany(User, { through: FeedPostLike });
+User.belongsToMany(FeedPost, {
+  through: "feedPostLikes",
+  sourceKey: "id",
+  targetKey: "id",
+  timestamps: false,
+});
+FeedPost.belongsToMany(User, {
+  through: "feedPostLikes",
+  sourceKey: "id",
+  targetKey: "id",
+  timestamps: false,
+});
 
 export {
   MainCategory,
@@ -84,5 +93,4 @@ export {
   AvailableReservation,
   FeedPost,
   FeedComment,
-  FeedPostLike,
 };

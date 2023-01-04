@@ -1,4 +1,4 @@
-import { FeedComment, FeedPost, FeedPostLike } from "../models";
+import { FeedComment, FeedPost, User } from "../models";
 import ApiError from "../utils/ApiError";
 import { FEED_COMMENT_PER_PAGE } from "../utils/Constant";
 
@@ -83,9 +83,10 @@ export default {
     if (!id) throw ApiError.setBadRequest("Post ID is required.");
     if (!userId) throw ApiError.setBadRequest("User ID is required.");
 
-    const foundPost = await FeedPost.findOne({ where: { id } });
-    if (!foundPost) throw ApiError.setBadRequest("Post does not exist.");
+    const foundUser = await User.findByPk(userId);
+    console.log("🤢", typeof userId, foundUser);
+    const foundPost = await FeedPost.findByPk(id);
 
-    await FeedPostLike.create("");
+    return foundUser.addFeedPost(foundPost);
   },
 };
