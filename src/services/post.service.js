@@ -1,3 +1,4 @@
+import { where } from "sequelize";
 import { FeedComment, FeedPost, User } from "../models";
 import ApiError from "../utils/ApiError";
 import { FEED_COMMENT_PER_PAGE } from "../utils/Constant";
@@ -79,14 +80,36 @@ export default {
     });
   },
 
-  async likePost(id, userId) {
-    if (!id) throw ApiError.setBadRequest("Post ID is required.");
+  async findUserAndPostById(postId, userId) {
+    if (!postId) throw ApiError.setBadRequest("Post ID is required.");
     if (!userId) throw ApiError.setBadRequest("User ID is required.");
 
+    const foundPost = await FeedPost.findByPk(postId);
     const foundUser = await User.findByPk(userId);
-    console.log("🤢", typeof userId, foundUser);
-    const foundPost = await FeedPost.findByPk(id);
+
+    return { foundPost, foundUser };
+  },
+
+  async likePost(id, userId) {
+    const { foundPost, foundUser } = await this.findUserAndPostById(id, userId);
+
+    const isLikeHistoryExist = await foundUser.hasFeedPost(foundPost);
+
+    console.log("🤢", isLikeHistoryExist);
+    if (isLikeHistoryExist)
+      throw ApiError.setBadRequest("This user already LIKED the post.");
 
     return foundUser.addFeedPost(foundPost);
+  },
+
+  async undoLikePost(id, userId) {
+    const { foundPost, foundUser } = await this.findUserAndPostById(id, userId);
+
+    const isLikeHistoryExist = await foundUser.hasFeedPost(foundPost);
+
+    if (!isLikeHistoryExist)
+      throw ApiError.setBadRequest("This user did not LIKED the post.");
+
+    return foundUser.removeFeedPost(foundPost);
   },
 };
