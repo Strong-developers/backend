@@ -26,7 +26,7 @@ export default {
       return res.status(201).json({
         success: true,
         status: 201,
-        message: "Succesfully EDIT the user nickname.",
+        message: "Succesfully UPDATE the user nickname.",
       });
     } catch (err) {
       next(err);
@@ -43,6 +43,22 @@ export default {
         success: true,
         status: 201,
         message: "Password CORRECT.",
+      });
+    } catch (err) {
+      next(err);
+    }
+  },
+
+  async updatePassword(req, res, next) {
+    const userId = req.userId;
+    const { password } = req.body;
+    try {
+      await userService.updatePassword(userId, password);
+
+      return res.status(201).json({
+        success: true,
+        status: 201,
+        message: "Successfully UPDATE the user password.",
       });
     } catch (err) {
       next(err);
