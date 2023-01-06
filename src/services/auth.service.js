@@ -98,29 +98,33 @@ export default {
     if (!email) throw ApiError.setBadRequest("Email is required.");
     if (!password) throw ApiError.setBadRequest("Password is required.");
 
-    const foundUser = await User.findOne({
+    let foundUser = await User.findOne({
       where: { email },
-      attributes: ["id", "email", "nickname", "role"],
-      raw: true,
     });
+
     if (!foundUser) {
       throw ApiError.setBadRequest("Email does not exist.");
     }
 
-    const hashedpassword = await bcrypt.hash(
+    const isCorrectPassword = await bcrypt.compare(
       password,
-      Number.parseInt(process.env.SALTROUNDS)
+      foundUser.password
     );
-    const isCorrectPassword = await bcrypt.compare(password, hashedpassword);
 
     if (!isCorrectPassword) {
       throw ApiError.setBadRequest("Password is not correct.");
     }
 
+    foundUser = await User.findOne({
+      where: { email },
+      attributes: { exclude: ["password"] },
+      include: Shelter,
+      raw: true,
+    });
+
     return foundUser;
   },
 
-  // Access Token 생성
   async createAccessToken(id) {
     const accessToken = jwt.sign({ id }, process.env.ACCESS_TOKEN_SECRET, {
       expiresIn: "1h",
