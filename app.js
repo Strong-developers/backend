@@ -9,6 +9,7 @@ import {
   reviewRouter,
   feedRouter,
   postRouter,
+  userRouter,
 } from "./src/routes";
 
 dotenv.config();
@@ -31,6 +32,7 @@ app.use("/auth", authRouter);
 app.use("/review", reviewRouter);
 app.use("/shelter", feedRouter);
 app.use("/post", postRouter);
+app.use("/user", userRouter);
 
 // 에러처리 미들웨어
 app.use(errorMiddleware);
