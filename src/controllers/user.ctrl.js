@@ -32,4 +32,20 @@ export default {
       next(err);
     }
   },
+
+  async verifyPassword(req, res, next) {
+    const userId = req.userId;
+    const { password } = req.body;
+    try {
+      await userService.verifyPassword(userId, password);
+
+      return res.status(201).json({
+        success: true,
+        status: 201,
+        message: "Password CORRECT.",
+      });
+    } catch (err) {
+      next(err);
+    }
+  },
 };
