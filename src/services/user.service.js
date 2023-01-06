@@ -20,11 +20,10 @@ export default {
     return foundUser;
   },
 
-  async editNickname(userId, nickname) {
+  async updateNickname(userId, nickname) {
     if (!userId) throw ApiError.setBadRequest("User ID is required.");
     if (!nickname) throw ApiError.setBadRequest("New nickname is required.");
 
-    console.log("🤢", nickname);
     await User.update({ nickname }, { where: { id: userId } });
 
     return;
@@ -46,4 +45,6 @@ export default {
 
     return;
   },
+
+  async,
 };

@@ -17,11 +17,11 @@ export default {
     }
   },
 
-  async editNickname(req, res, next) {
+  async updateNickname(req, res, next) {
     const userId = req.userId;
     const { nickname } = req.body;
     try {
-      await userService.editNickname(userId, nickname);
+      await userService.updateNickname(userId, nickname);
 
       return res.status(201).json({
         success: true,
