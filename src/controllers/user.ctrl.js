@@ -16,4 +16,20 @@ export default {
       next(err);
     }
   },
+
+  async editNickname(req, res, next) {
+    const userId = req.userId;
+    const { nickname } = req.body;
+    try {
+      await userService.editNickname(userId, nickname);
+
+      return res.status(201).json({
+        success: true,
+        status: 201,
+        message: "Succesfully EDIT the user nickname.",
+      });
+    } catch (err) {
+      next(err);
+    }
+  },
 };

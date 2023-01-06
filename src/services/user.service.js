@@ -18,4 +18,14 @@ export default {
 
     return foundUser;
   },
+
+  async editNickname(userId, nickname) {
+    if (!userId) throw ApiError.setBadRequest("User ID required.");
+    if (!nickname) throw ApiError.setBadRequest("New nickname is required.");
+
+    console.log("🤢", nickname);
+    await User.update({ nickname }, { where: { id: userId } });
+
+    return;
+  },
 };
